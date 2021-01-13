@@ -1,6 +1,15 @@
 import Discord from "discord.js";
 import dotenv from "dotenv";
+import express from "express";
 import { handleMessage, Message } from "./commands";
+
+/**
+ * CONTRIBUTORS
+ * =================================
+ * To add functionality to this bot, please create a file in /commands
+ * that exports an object with type "Command". See the tutorial for more
+ * details. Please do not modify this file.
+ */
 
 // Leave this call for the logs.
 console.log("Starting Discord Bot");
@@ -25,3 +34,18 @@ client.on("message", (message: Message) => {
 // This call should come last.
 dotenv.config();
 client.login(process.env.DISCORD_API_KEY);
+
+/**
+ * Start a tiny express app at {port} to prevent Heroku from killing the service.
+ */
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.send("SITE-Bot");
+});
+
+app.listen(port, () => {
+  console.log(`at http://localhost:${port}`);
+});
