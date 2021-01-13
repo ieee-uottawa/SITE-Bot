@@ -1,6 +1,8 @@
 # SITE-Bot
 
-The **SITE-Bot** runs on the SITE discord.
+The **SITE-Bot** runs on the SITE discord. To contribute a command, please read on.
+
+<br />
 
 ## Development
 
@@ -16,6 +18,8 @@ the repository. Then run:
 npm install
 npm run develop
 ```
+
+<br />
 
 ## Contribute A Command
 
@@ -100,6 +104,8 @@ import Dice from "./dice";
 
 const commands: Command[] = [PingPong, Dice];
 ```
+
+<br />
 
 ## Slightly More Complex Example
 
