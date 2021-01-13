@@ -16,8 +16,10 @@ export type Message = {
 };
 
 export type CommandDefinition = {
-  name: string;
-  key: string;
+  name: string; // Ex: "Dice Rollin' Bot"
+  description: string; // Ex: "Roll a die with any sides, default is 6."
+  usage: string; // Ex: "!roll <number of sides>"
+  key: string; // Ex: "roll"
 };
 
 export type Command = {

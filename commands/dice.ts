@@ -29,6 +29,8 @@ function getRandomInt(max: number) {
 
 export const description: CommandDefinition = {
   name: "Dice Rollin' Bot",
+  description: "Roll a die with any sides, default is 6.",
+  usage: "!roll <number of sides>",
   key: "roll",
 };
 
