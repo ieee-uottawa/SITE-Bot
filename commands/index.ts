@@ -1,8 +1,9 @@
 import PingPong from "./pingpong";
 import Dice from "./dice";
+import Help from "./help";
 
 // To register a command, import it above and add it to this array.
-const commands: Command[] = [PingPong, Dice];
+export const commands: Command[] = [Help, PingPong, Dice];
 
 /**
  * Types and message handling.
