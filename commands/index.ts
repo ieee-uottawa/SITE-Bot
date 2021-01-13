@@ -1,5 +1,5 @@
 import PingPong from "./pingpong";
-
+import Dice from "./dice";
 /**
  * To register a command, add it to this array.
  */
@@ -26,7 +26,6 @@ export type Command = {
 };
 
 export function extractKey(content: string): string {
-
   const start = content.split(" ")[0];
   const key = start.replace("!", "");
   console.log(`Key is ${key}`);

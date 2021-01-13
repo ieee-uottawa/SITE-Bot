@@ -1,12 +1,12 @@
 import { Command, CommandDefinition, Message } from ".";
 
 export const description: CommandDefinition = {
-  name: "Ping Pong",
-  key: "ping",
+  name: "Dice Rollin' Bot",
+  key: "roll",
 };
 
 export const action = (message: Message) => {
-  message.channel.send("Pong! Wow, the bot works!");
+  message.channel.send("Rolling a die...");
 };
 
 export const command: Command = {
