@@ -20,8 +20,8 @@ npm run develop
 ## Contribute A Command
 
 It's easy to add a command to the **SITE Bot**, just add a file to the
-`/commands` directory that exports a `Command` type object. Here's the simplest
-command, `PingPong`. I'll walk you through how it works below.
+`/commands` directory that exports a `Command` type object. Here's the
+simplest command, `PingPong`. I'll walk you through how it works below.
 
 ```typescript
 import { Command, CommandDefinition, Message } from ".";
@@ -55,6 +55,10 @@ First, we need to import some types from `commands/index.ts`
 import { Command, CommandDefinition, Message } from ".";
 ```
 
+To register a command, you need to fill out a `CommandDefinition` object. This
+is very important to do, as without the `key` field, we won't be able to provide
+your functions with input.
+
 ```typescript
 export const description: CommandDefinition = {
   name: "Ping Pong",
@@ -64,11 +68,18 @@ export const description: CommandDefinition = {
 };
 ```
 
+The action function can be named anything, but it must take a Discord.js message
+object and be included in the default export, the `Command` object. Check out
+the [Discord.js API](https://discord.js.org/#/docs/main/stable/class/Message) to see the properties of `message`.
+
 ```typescript
 export const action = (message: Message) => {
   message.channel.send("Pong! Wow, the bot works!");
 };
 ```
+
+Finally, you'll need to make one of these. Provide your `CommandDefinition`
+object and action function, and you're almost good to go.
 
 ```typescript
 export const command: Command = {
@@ -78,7 +89,19 @@ export const command: Command = {
 export default command;
 ```
 
-## Complex Example
+The **final step** is to import your new command in `commands/index.ts` and add
+it to the commands array. This will ensure that, when messages come in, they
+will be checked against all current command **keys** and functions with matching
+keys will be run.
+
+```typescript
+import PingPong from "./pingpong";
+import Dice from "./dice";
+
+const commands: Command[] = [PingPong, Dice];
+```
+
+## Slightly More Complex Example
 
 ```typescript
 import { Command, CommandDefinition, Message } from ".";
