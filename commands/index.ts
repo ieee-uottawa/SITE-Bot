@@ -26,8 +26,6 @@ export type Command = {
 };
 
 export function extractKey(content: string): string {
-  // Return an empty string (no key) if message does not start with a bang.
-  if (!content.startsWith("!")) return "";
 
   const start = content.split(" ")[0];
   const key = start.replace("!", "");

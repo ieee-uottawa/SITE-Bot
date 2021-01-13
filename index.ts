@@ -4,35 +4,27 @@ import express from "express";
 import { handleMessage, Message } from "./commands";
 
 /**
- * CONTRIBUTORS
- * =================================
+ * ATTENTION, CONTRIBUTORS!
+ * ========================
  * To add functionality to this bot, please create a file in /commands
  * that exports an object with type "Command". See the tutorial for more
  * details. Please do not modify this file.
  */
 
-// Leave this call for the logs.
-console.log("Starting Discord Bot");
-
 const client = new Discord.Client();
-
-const world = "world";
-
-export function hello(word: string = world): string {
-  return `Hello ${world}! `;
-}
 
 client.once("ready", () => {
   console.log("Logged in to Discord! The bot should be available now.");
 });
 
 client.on("message", (message: Message) => {
-  // Error handling should occur here.
+  // Return an empty string (no key) if message does not start with a bang.
+  if (!message.content.startsWith("!")) return;
   handleMessage(message);
 });
 
-// This call should come last.
 dotenv.config();
+// This Discord client call should come last.
 client.login(process.env.DISCORD_API_KEY);
 
 /**
