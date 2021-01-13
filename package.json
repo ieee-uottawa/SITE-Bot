@@ -4,7 +4,8 @@
   "description": "Typescript Test",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel watch:build watch:server --print-label",
+    "start": "tsc && node ./dist/index.js",
+    "develop": "npm-run-all --parallel watch:build watch:server --print-label",
     "watch:build": "tsc --watch",
     "watch:server": "nodemon ./dist/index.js --watch ./dist",
     "clean": "rimraf dist"

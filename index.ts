@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import dotenv from "dotenv";
 import { handleMessage, Message } from "./commands";
 
 // Leave this call for the logs.
@@ -22,4 +23,5 @@ client.on("message", (message: Message) => {
 });
 
 // This call should come last.
+dotenv.config();
 client.login(process.env.DISCORD_API_KEY);
