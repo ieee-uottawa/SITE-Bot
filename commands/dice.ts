@@ -21,7 +21,7 @@ function parseDieSize(content: string): number {
  * @param max The highest possible roll.
  */
 function getRandomInt(max: number) {
-  return Math.floor(Math.random() * Math.floor(max + 1));
+  return 1 + Math.floor(Math.random() * Math.floor(max));
 }
 
 // Required Command Exports
@@ -37,14 +37,16 @@ export const description: CommandDefinition = {
 export const action = (message: Message) => {
   // Extract die size from message.
   const dieSize = parseDieSize(message.content);
+  // Respond based on die size.
   if (dieSize && dieSize > 1000) {
     message.channel.send(`Ugh, I can't roll a die that size!`);
   } else if (dieSize && dieSize > 0) {
     const result = getRandomInt(dieSize);
-    message.channel.send(`Rolling a D${dieSize} -> ${result}`);
+    message.channel.send(`:game_die: Rolling a D${dieSize} -> **${result}**`);
   } else {
+    // If die size could not be parsed, roll a D6.
     const result = getRandomInt(6);
-    message.channel.send(`Rolling a D6 -> ${result}`);
+    message.channel.send(`:game_die: Rolling a D6 -> **${result}**`);
   }
 };
 

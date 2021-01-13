@@ -1,9 +1,7 @@
 import PingPong from "./pingpong";
 import Dice from "./dice";
-/**
- * To register a command, add it to this array.
- */
 
+// To register a command, import it above and add it to this array.
 const commands: Command[] = [PingPong, Dice];
 
 /**
