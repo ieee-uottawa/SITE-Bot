@@ -1,5 +1,8 @@
 # SITE-Bot
 
+![CI](https://github.com/ieee-uottawa/SITE-Bot/workflows/CI/badge.svg)
+[![TypeScript](https://badges.frapsoft.com/typescript/awesome/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
+
 The **SITE-Bot** runs on the SITE discord. To contribute a command, please read on.
 
 <br />
