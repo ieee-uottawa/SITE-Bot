@@ -4,7 +4,7 @@ import Dice from "./dice";
  * To register a command, add it to this array.
  */
 
-const commands: Command[] = [PingPong];
+const commands: Command[] = [PingPong, Dice];
 
 /**
  * Types and message handling.
