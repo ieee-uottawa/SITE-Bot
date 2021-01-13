@@ -3,7 +3,7 @@ name: CI
 on: push
 
 jobs:
-  typescript-compile:
+  ts-compile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,7 +11,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: yarn install, build and test
+      - name: install and build
         run: |
           npm install
           npm run build
