@@ -22,4 +22,4 @@ client.on("message", (message: Message) => {
 });
 
 // This call should come last.
-client.login("Nzk4OTg2MDcwNDcyOTE3MDcy.X_8_ww.eTJ9h6G66fVWGZq3lVBW7oZ_IpE");
+client.login(process.env.DISCORD_API_KEY);
