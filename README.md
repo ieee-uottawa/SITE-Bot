@@ -28,11 +28,13 @@ import { Command, CommandDefinition, Message } from ".";
 
 export const description: CommandDefinition = {
   name: "Ping Pong",
+  description: "Replies with 'Pong!'",
+  usage: "!ping",
   key: "ping",
 };
 
 export const action = (message: Message) => {
-  message.channel.send("Pong.");
+  message.channel.send("Pong! Wow, the bot works!");
 };
 
 export const command: Command = {
@@ -42,27 +44,98 @@ export const command: Command = {
 export default command;
 ```
 
-You could use this as a template:
+Each of these objects is important for registering your command.
+
+I'll go through the `pingpong.ts` file step by step to better express what's
+going on.
+
+First, we need to import some types from `commands/index.ts`
 
 ```typescript
-// Import types from the command index.ts file
 import { Command, CommandDefinition, Message } from ".";
+```
 
-// Provide a description for your command.
+```typescript
 export const description: CommandDefinition = {
-  name: "", // Enter the bot name here
-  key: "", // This comes immediately after the exclamation mark
+  name: "Ping Pong",
+  description: "Replies with 'Pong!'",
+  usage: "!ping",
+  key: "ping",
 };
+```
 
-// This function will be called when the key is detected in a message.
+```typescript
 export const action = (message: Message) => {
-  // Add stuff here, or calls to other functions, to run a command.
+  message.channel.send("Pong! Wow, the bot works!");
 };
+```
 
-// This allows the system to register and listen for your command key.
+```typescript
 export const command: Command = {
   definition: description,
   action: action,
 };
-export default command; // Leave this alone, we need it later.
+export default command;
+```
+
+## Complex Example
+
+```typescript
+import { Command, CommandDefinition, Message } from ".";
+
+// Functions used by this command
+// ==============================
+
+/**
+ * Uses a regex to extract the first number given by the user.
+ * @param content The message provided by the user.
+ */
+function parseDieSize(content: string): number {
+  const match = content.match(/\d+/);
+  if (match && match[0]) {
+    const num = parseInt(match[0]);
+    console.log(`Got a die size: ${num}`);
+    return num;
+  }
+  return 0;
+}
+/**
+ * Returns a random number below the maximum.
+ * @param max The highest possible roll.
+ */
+function getRandomInt(max: number) {
+  return 1 + Math.floor(Math.random() * Math.floor(max));
+}
+
+// Required Command Exports
+// ========================
+
+export const description: CommandDefinition = {
+  name: "Dice Rollin' Bot",
+  description: "Roll a die with any sides, default is 6.",
+  usage: "!roll <number of sides>",
+  key: "roll",
+};
+
+export const action = (message: Message) => {
+  // Extract die size from message.
+  const dieSize = parseDieSize(message.content);
+  // Respond based on die size.
+  if (dieSize && dieSize > 1000) {
+    message.channel.send(`Ugh, I can't roll a die that size!`);
+  } else if (dieSize && dieSize > 0) {
+    const result = getRandomInt(dieSize);
+    message.channel.send(`:game_die: Rolling a D${dieSize} -> **${result}**`);
+  } else {
+    // If die size could not be parsed, roll a D6.
+    const result = getRandomInt(6);
+    message.channel.send(`:game_die: Rolling a D6 -> **${result}**`);
+  }
+};
+
+export const command: Command = {
+  definition: description,
+  action: action,
+};
+export default command;
 ```
