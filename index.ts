@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import dotenv from "dotenv";
 import express from "express";
-import { handleMessage, Message } from "./commands";
-
+import { handleMessage } from "./commands";
+import { Message } from "discord.js";
 /**
  * ATTENTION, CONTRIBUTORS!
  * ========================
