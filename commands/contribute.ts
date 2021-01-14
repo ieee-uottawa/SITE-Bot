@@ -9,12 +9,13 @@ export const description: CommandDefinition = {
 };
 
 export const action = (message: Message) => {
-  message.channel.send(
+  message.author.send(
     "Contribute to the **IEEE uOttawa SITE-Bot**!" +
       "\n\nLook through the source code at" +
       " https://github.com/ieee-uottawa/SITE-Bot" +
       " and send a pull request."
   );
+  message.channel.send("Check your inbox!");
 };
 
 export const command: Command = {

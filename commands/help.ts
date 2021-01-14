@@ -10,7 +10,8 @@ export const description: CommandDefinition = {
 };
 
 export const action = (message: Message) => {
-  message.channel.send(help(commands));
+  message.author.send(help(commands));
+  message.channel.send("Check your inbox!");
 };
 
 export const command: Command = {
