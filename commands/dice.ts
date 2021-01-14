@@ -46,23 +46,27 @@ export const action = (message: Message) => {
   // Extract die size from message.
   const dieData = parseDieSize(message.content);
 
-  // Don't roll more than a D10,000
-  if (dieData.num > 10_000) {
-    message.channel.send("Ugh, I can't roll a die that size!");
+  // Witty answers
+  if (dieData.num < 2) {
+    message.channel.send(
+      `:game_die: Er, ask the physics prof to show the devs a ${dieData.num}-sided die  :wink:`
+    );
     return;
   }
 
-  // Witty answers
-  if (dieData.num === 0 || dieData.num === 1) {
+  // Don't roll more than a D10,000
+  if (dieData.num > 10_000) {
     message.channel.send(
-      `Er, ask the physics prof to show the devs a ${dieData.num}-sided die  :wink:`
+      ":game_die: Ugh, I can't roll a die that size! :skull:"
     );
     return;
   }
 
   // Don't roll more than 500 dice.
   if (dieData.volume > 200) {
-    message.channel.send("I can't roll that volume of dice!");
+    message.channel.send(
+      ":game_die: I can't roll that volume of dice! :skull:"
+    );
     return;
   }
 
