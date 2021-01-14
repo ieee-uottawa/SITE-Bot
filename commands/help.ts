@@ -1,4 +1,5 @@
-import { Command, CommandDefinition, Message, commands } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition, commands } from ".";
 import { help } from "../utils";
 
 export const description: CommandDefinition = {

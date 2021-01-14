@@ -1,4 +1,5 @@
-import { Command, CommandDefinition, Message } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition } from ".";
 
 // Functions used by this command
 // ==============================
@@ -73,8 +74,11 @@ export const action = (message: Message) => {
 
   // Respond based on die size.
   const result = results.join(", ");
+  const username = message.author.tag.split("#")[0];
   message.channel.send(
-    `:game_die: Rolling ${dieData.volume} **D${dieData.num}** -> ${result}`
+    `:game_die:  ${username} rolled ${
+      dieData.volume === 1 ? "a" : dieData.volume
+    } **D${dieData.num}** -> ${result}`
   );
 };
 

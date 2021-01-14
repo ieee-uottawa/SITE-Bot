@@ -1,19 +1,18 @@
+import Help from "./help";
 import PingPong from "./pingpong";
 import Dice from "./dice";
-import Help from "./help";
+import FormulaSheets from "./formula-sheets";
 import Contribute from "./contribute";
+import { Message } from "discord.js";
 
 // To register a command, import it above and add it to this array.
-export const commands: Command[] = [Help, PingPong, Dice, Contribute];
-
-/**
- * Types and message handling.
- */
-
-export type Message = {
-  content: string;
-  channel: any;
-};
+export const commands: Command[] = [
+  Help,
+  PingPong,
+  Dice,
+  FormulaSheets,
+  Contribute,
+];
 
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"

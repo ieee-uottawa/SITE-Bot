@@ -1,4 +1,5 @@
-import { Command, CommandDefinition, Message } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition } from ".";
 
 export const description: CommandDefinition = {
   name: "Ping Pong",
