@@ -57,10 +57,12 @@ export const action = (message: Message) => {
     return;
   }
 
+  // Roll the dice.
   const results: number[] = [];
   for (let i = 0; i < dieData.volume; i++) {
     results.push(getRandomInt(dieData.num));
   }
+
   // Respond based on die size.
   const result = results.join(", ");
   message.channel.send(
