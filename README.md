@@ -31,7 +31,8 @@ It's easy to add a command to the **SITE Bot**, just add a file to the
 simplest command, `PingPong`. I'll walk you through how it works below.
 
 ```typescript
-import { Command, CommandDefinition, Message } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition } from ".";
 
 export const description: CommandDefinition = {
   name: "Ping Pong",
@@ -59,7 +60,8 @@ going on.
 First, we need to import some types from `commands/index.ts`
 
 ```typescript
-import { Command, CommandDefinition, Message } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition } from ".";
 ```
 
 To register a command, you need to fill out a `CommandDefinition` object. This
@@ -113,7 +115,8 @@ const commands: Command[] = [PingPong, Dice];
 ## Slightly More Complex Example
 
 ```typescript
-import { Command, CommandDefinition, Message } from ".";
+import { Message } from "discord.js";
+import { Command, CommandDefinition } from ".";
 
 // Functions used by this command
 // ==============================
