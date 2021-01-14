@@ -32,6 +32,14 @@ npm run develop
 
 ## Contribute A Command
 
+Here are the limitations and requirements for site-bot commands:
+
+- Commands start with a _bang!_ We don't want to scrape all messages.
+- Your command may only have one key, `!<key>`.
+- If your command is called with your provided key, the message is yours to handle.
+- Try to make as much use of promises/async as possible.
+- **Abide by the types.**
+
 It's easy to add a command to the **SITE Bot**, just add a file to the
 `/commands` directory that exports a `Command` type object. Here's the
 simplest command, `PingPong`. I'll walk you through how it works below.
