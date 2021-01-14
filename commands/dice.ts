@@ -51,7 +51,15 @@ export const action = (message: Message) => {
     return;
   }
 
-  // Don't roll more than 200 dice.
+  // Witty answers
+  if (dieData.num === 0 || dieData.num === 1) {
+    message.channel.send(
+      `Er, ask the physics prof to show the devs a ${dieData.num}-sided die  :wink:`
+    );
+    return;
+  }
+
+  // Don't roll more than 500 dice.
   if (dieData.volume > 200) {
     message.channel.send("I can't roll that volume of dice!");
     return;
