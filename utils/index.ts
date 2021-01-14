@@ -1,6 +1,6 @@
 import { Command } from "../commands";
 
-export const intro = "**SITE-Bot - Help Menu**\n\n";
+const intro = "**SITE-Bot - Help Menu**\n\n";
 
 export const help = (commands: Command[]): string => {
   return (
