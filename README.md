@@ -14,7 +14,7 @@ contribution and we'll do our best to review and merge it.
 
 To test your additions, [set up a bot
 app](https://discordjs.guide/preparations/setting-up-a-bot-application.html) on
-a personal test server, and place your API key in a `.env` file in the root of
+a personal test server, and place your bot token in a `.env` file in the root of
 the repository, like so:
 
 ```
