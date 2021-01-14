@@ -1,18 +1,11 @@
 import Help from "./help";
 import PingPong from "./pingpong";
 import Dice from "./dice";
-import FormulaSheets from "./formula-sheets";
 import Contribute from "./contribute";
 import { Message } from "discord.js";
 
 // To register a command, import it above and add it to this array.
-export const commands: Command[] = [
-  Help,
-  PingPong,
-  Dice,
-  FormulaSheets,
-  Contribute,
-];
+export const commands: Command[] = [Help, PingPong, Dice, Contribute];
 
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"
@@ -44,3 +37,11 @@ export async function handleMessage<Promise>(message: Message) {
     }
   });
 }
+
+// Init IFFE
+(async () => {
+  console.log("Loaded the following commands:");
+  commands.forEach((c) => {
+    console.log(` - !${c.definition.key} - ${c.definition.name}`);
+  });
+})();
