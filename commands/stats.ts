@@ -1,11 +1,11 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Command, CommandDefinition, Action } from ".";
 
 export const description: CommandDefinition = {
   name: "Stat Hoarder",
   description: "Displays server statistics",
   usage: ["!stats"],
-  key: "stats",
+  keys: ["stats"],
 };
 
 export const action = (message: Message) => {
