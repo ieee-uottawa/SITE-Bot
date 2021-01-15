@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition } from ".";
 
 axiosRetry(axios, { retries: 3 });
 
@@ -30,10 +30,10 @@ export const description: CommandDefinition = {
   name: "Knowledge",
   description: "Returns a random timbit of knowledge.",
   usage: ["!knowledge"],
-  key: "knowledge",
+  keys: ["knowledge"],
 };
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   axios
     .get(endpoint)
     .then((res: any) => {

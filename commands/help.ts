@@ -1,12 +1,12 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition, commands } from ".";
+import { Action, Command, CommandDefinition, commands } from ".";
 import { help } from "../utils";
 
 export const description: CommandDefinition = {
   name: "Help",
   description: "Prints help text for included commands.",
   usage: ["!help", "!help public"],
-  key: "help",
+  keys: ["help"],
 };
 
 /**
@@ -19,7 +19,7 @@ function isCommandPublic(content: string): boolean {
   return true;
 }
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   const isPublic = isCommandPublic(message.content);
   const messenger = isPublic ? message.channel : message.author;
 

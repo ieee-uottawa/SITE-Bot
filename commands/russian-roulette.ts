@@ -1,12 +1,12 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition } from ".";
 
 export const description: CommandDefinition = {
   name: "Russian Roulette",
   description:
     "Has a 1/5 chance of kicking you from the server. Don't play alone.",
   usage: ["!roulette", "!roulette extreme (will one-day ban instead of kick)"],
-  key: "roulette",
+  keys: ["roulette"],
 };
 
 /**
@@ -41,7 +41,7 @@ function unbannable(exception: any, message: Message) {
   );
 }
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   // If not in a guild, tell 'em to play with friends.
   if (!message.guild) {
     message.reply(":gun: This game is better with friends.  :wink:");

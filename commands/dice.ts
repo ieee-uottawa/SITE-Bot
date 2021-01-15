@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Command, CommandDefinition, Action } from ".";
 
 export const description: CommandDefinition = {
   name: "Dice Rollin' Bot",
@@ -7,8 +7,9 @@ export const description: CommandDefinition = {
   usage: [
     "!roll <number of sides>",
     "!roll <number of dice> <number of sides>",
+    "!flip (flips a coin instead)",
   ],
-  key: "roll",
+  keys: ["roll", "flip"],
 };
 
 // Functions used by this command
@@ -45,48 +46,59 @@ function getRandomInt(max: number): number {
 // Required Command Exports
 // ========================
 
-export const action = (message: Message) => {
-  // Extract die size from message.
-  const dieData = parseDieSize(message.content);
+export const action: Action = (message, key) => {
+  if (key === "roll") {
+    // Extract die size from message.
+    const dieData = parseDieSize(message.content);
 
-  // Witty answers
-  if (dieData.num < 2) {
+    // Witty answers
+    if (dieData.num < 2) {
+      message.channel.send(
+        `:game_die: Er, ask the physics prof to show the devs a ${dieData.num}-sided die  :wink:`
+      );
+      return;
+    }
+
+    // Don't roll more than a D10,000
+    if (dieData.num > 10_000) {
+      message.channel.send(
+        ":game_die: Ugh, I can't roll a die that size! :skull:"
+      );
+      return;
+    }
+
+    // Don't roll more than 500 dice.
+    if (dieData.volume > 200) {
+      message.channel.send(
+        ":game_die: I can't roll that volume of dice! :skull:"
+      );
+      return;
+    }
+
+    // Roll the dice.
+    const results: number[] = [];
+    for (let i = 0; i < dieData.volume; i++) {
+      results.push(getRandomInt(dieData.num));
+    }
+
+    // Respond based on die size.
+    const result = results.join(", ");
+    const username = message.author.tag.split("#")[0];
     message.channel.send(
-      `:game_die: Er, ask the physics prof to show the devs a ${dieData.num}-sided die  :wink:`
+      `:game_die:  ${username} rolled ${
+        dieData.volume === 1 ? "a" : dieData.volume
+      } **D${dieData.num}** -> ${result}`
     );
-    return;
-  }
-
-  // Don't roll more than a D10,000
-  if (dieData.num > 10_000) {
+  } else {
+    // Key is flip
+    const res = Math.random() > 0.5;
+    const username = message.author.tag.split("#")[0];
     message.channel.send(
-      ":game_die: Ugh, I can't roll a die that size! :skull:"
+      `:coin:  ${username} tossed a coin and... _it's ${
+        res ? "HEADS" : "TAILS"
+      }!_`
     );
-    return;
   }
-
-  // Don't roll more than 500 dice.
-  if (dieData.volume > 200) {
-    message.channel.send(
-      ":game_die: I can't roll that volume of dice! :skull:"
-    );
-    return;
-  }
-
-  // Roll the dice.
-  const results: number[] = [];
-  for (let i = 0; i < dieData.volume; i++) {
-    results.push(getRandomInt(dieData.num));
-  }
-
-  // Respond based on die size.
-  const result = results.join(", ");
-  const username = message.author.tag.split("#")[0];
-  message.channel.send(
-    `:game_die:  ${username} rolled ${
-      dieData.volume === 1 ? "a" : dieData.volume
-    } **D${dieData.num}** -> ${result}`
-  );
 };
 
 // Exports

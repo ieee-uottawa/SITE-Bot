@@ -7,36 +7,51 @@ import Contribute from "./contribute";
 import Roulette from "./russian-roulette";
 
 // To register a command, import it above and add it to this array.
-export const commands: Command[] = [Help, Dice, Knowledge, Roulette, PingPong, Contribute];
+export const commands: Command[] = [
+  Help,
+  Dice,
+  Knowledge,
+  Roulette,
+  PingPong,
+  Contribute,
+];
 
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"
   description: string; // Ex: "Roll a die with any sides, default is 6."
   usage: string[]; // Ex: ["!roll <number of sides>"]
-  key: string; // Ex: "roll"
+  keys: string[]; // Ex: ["roll", "coinflip"]
 };
 
 export type Command = {
   definition: CommandDefinition;
-  action: (message: Message) => void;
+  action: Action;
 };
+
+export type Action = (message: Message, key: string) => void;
 
 export function extractKey(content: string): string {
   const start = content.split(" ")[0];
   const key = start.replace("!", "");
   console.log(`Key is ${key}`);
-  return key;
+  return key.toLowerCase();
 }
 
 export async function handleMessage<Promise>(message: Message) {
   console.log(`Handling message ${message.content}`);
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
-  commands.forEach((c) => {
-    if (c.definition.key === key) {
-      console.log(`Running the ${c.definition.name} command.`);
-      c.action(message);
-    }
+
+  // The use of .every here allows us to quit as soon as a command is found.
+  commands.every((command) => {
+    return command.definition.keys.every((cmdKey) => {
+      if (cmdKey === key) {
+        console.log(`Running the ${command.definition.name} command.`);
+        command.action(message, cmdKey);
+        return false;
+      }
+      return true;
+    });
   });
 }
 
@@ -44,6 +59,6 @@ export async function handleMessage<Promise>(message: Message) {
 (async () => {
   console.log("Loaded the following commands:");
   commands.forEach((c) => {
-    console.log(` - !${c.definition.key} - ${c.definition.name}`);
+    console.log(` - !${c.definition.keys.join(", !")} - ${c.definition.name}`);
   });
 })();

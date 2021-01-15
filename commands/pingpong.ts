@@ -1,14 +1,14 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition } from ".";
 
 export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
   usage: ["!ping"],
-  key: "ping",
+  keys: ["ping"],
 };
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   message.channel.send("Pong! Wow, the bot works!");
 };
 
