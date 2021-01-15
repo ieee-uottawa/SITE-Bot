@@ -5,12 +5,12 @@ import Contribute from "./contribute";
 import { Message } from "discord.js";
 
 // To register a command, import it above and add it to this array.
-export const commands: Command[] = [Help, PingPong, Dice, Contribute];
+export const commands: Command[] = [Help, Dice, PingPong, Contribute];
 
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"
   description: string; // Ex: "Roll a die with any sides, default is 6."
-  usage: string; // Ex: "!roll <number of sides>"
+  usage: string[]; // Ex: "!roll <number of sides>"
   key: string; // Ex: "roll"
 };
 

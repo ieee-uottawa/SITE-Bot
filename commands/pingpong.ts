@@ -4,7 +4,7 @@ import { Command, CommandDefinition } from ".";
 export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
-  usage: "!ping",
+  usage: ["!ping"],
   key: "ping",
 };
 

@@ -4,7 +4,7 @@ import { Command, CommandDefinition } from ".";
 export const description: CommandDefinition = {
   name: "Contribute",
   description: "Prints instructions for adding a command to the bot.",
-  usage: "!contribute \n\t!contribute public",
+  usage: ["!contribute", "!contribute public"],
   key: "contribute",
 };
 

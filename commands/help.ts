@@ -5,7 +5,7 @@ import { help } from "../utils";
 export const description: CommandDefinition = {
   name: "Help",
   description: "Prints help text for included commands.",
-  usage: "!help \n\t!help public",
+  usage: ["!help", "!help public"],
   key: "help",
 };
 
@@ -15,17 +15,19 @@ export const description: CommandDefinition = {
  */
 function isCommandPublic(content: string): boolean {
   const match = content.toLowerCase().match(/\b(\w*public\w*)\b/g);
-  if (match === null) return false // Quit early if no matches found.
+  if (match === null) return false; // Quit early if no matches found.
   return true;
 }
 
 export const action = (message: Message) => {
   const isPublic = isCommandPublic(message.content);
-  const messenger = isPublic ? message.channel : message.author; 
+  const messenger = isPublic ? message.channel : message.author;
 
   messenger.send(help(commands));
-  if (!isPublic) 
-    message.channel.send("I've sent you the user manual! Type `!help public` to print the manual to this channel.")
+  if (!isPublic)
+    message.channel.send(
+      "I've sent you the user manual! Type `!help public` to print the manual to this channel."
+    );
 };
 
 export const command: Command = {

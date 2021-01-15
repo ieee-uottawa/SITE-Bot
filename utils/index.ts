@@ -8,7 +8,9 @@ export const help = (commands: Command[]): string => {
     commands
       .map(
         (c) =>
-          `**${c.definition.name}**: ${c.definition.description}\n\t${c.definition.usage}`
+          `**${c.definition.name}**: ${
+            c.definition.description
+          }${c.definition.usage.map((u) => `\n\t${u}`)}\n`
       )
       .join("\n")
   );
