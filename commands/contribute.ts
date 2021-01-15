@@ -29,7 +29,7 @@ export const action = (message: Message) => {
       " and send a pull request."
   );
   if (!isPublic)
-    message.channel.send(
+    message.reply(
       "I've sent you the details! Type `!contribute public` to print the info to this channel."
     );
 };

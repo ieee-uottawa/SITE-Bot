@@ -25,7 +25,7 @@ export const action = (message: Message) => {
 
   messenger.send(help(commands));
   if (!isPublic)
-    message.channel.send(
+    message.reply(
       "I've sent you the user manual! Type `!help public` to print the manual to this channel."
     );
 };
