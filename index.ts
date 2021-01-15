@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { handleMessage } from "./commands";
 import { Message } from "discord.js";
+
 /**
  * ATTENTION, CONTRIBUTORS!
  * ========================
@@ -11,13 +12,15 @@ import { Message } from "discord.js";
  * details. Please do not modify this file.
  */
 
-const client = new Discord.Client();
+export const client = new Discord.Client();
 
 client.once("ready", () => {
   console.log("Logged in to Discord! The bot should be available now.");
 });
 
 client.on("message", (message: Message) => {
+  // Don't respond to other bots.
+  if (message.author.bot) return;
   // Return an empty string (no key) if message does not start with a bang.
   if (!message.content.startsWith("!")) return;
   handleMessage(message);
@@ -31,7 +34,7 @@ client.login(process.env.DISCORD_API_KEY);
  * Start a tiny express app at {port} to prevent Heroku from killing the service.
  */
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
