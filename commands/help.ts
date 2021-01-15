@@ -14,7 +14,7 @@ export const description: CommandDefinition = {
  * @param content The message provided by the user.
  */
 function isCommandPublic(content: string): boolean {
-  const match = content.match(/\b(\w*public\w*)\b/g);
+  const match = content.toLowerCase().match(/\b(\w*public\w*)\b/g);
   if (match === null) return false // Quit early if no matches found.
   return true;
 }
