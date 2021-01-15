@@ -13,14 +13,14 @@ export const description: CommandDefinition = {
  * @param content The message provided by the user.
  */
 function isCommandPublic(content: string): boolean {
-  const match = content.match(/\b(\w*public\w*)\b/g);
-  if (match === null) return false // Quit early if no matches found.
+  const match = content.toLowerCase().match(/\b(\w*public\w*)\b/g);
+  if (match === null) return false; // Quit early if no matches found.
   return true;
 }
 
 export const action = (message: Message) => {
   const isPublic = isCommandPublic(message.content);
-  const messenger = isPublic ? message.channel : message.author; 
+  const messenger = isPublic ? message.channel : message.author;
 
   messenger.send(
     "Contribute to the **IEEE uOttawa SITE-Bot**!" +
@@ -28,8 +28,10 @@ export const action = (message: Message) => {
       " https://github.com/ieee-uottawa/SITE-Bot" +
       " and send a pull request."
   );
-  if (!isPublic) 
-    message.channel.send("I've sent you the details! Type `!contribute public` to print the info to this channel.")
+  if (!isPublic)
+    message.channel.send(
+      "I've sent you the details! Type `!contribute public` to print the info to this channel."
+    );
 };
 
 export const command: Command = {
