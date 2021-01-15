@@ -51,7 +51,7 @@ import { Command, CommandDefinition } from ".";
 export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
-  usage: "!ping",
+  usage: ["!ping"],
   key: "ping",
 };
 
@@ -86,7 +86,7 @@ your functions with input.
 export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
-  usage: "!ping",
+  usage: ["!ping"],
   key: "ping",
 };
 ```
@@ -144,7 +144,10 @@ import { Command, CommandDefinition } from ".";
 export const description: CommandDefinition = {
   name: "Dice Rollin' Bot",
   description: "Roll a die with any sides, default is 6.",
-  usage: "!roll <number of sides>\n\t!roll <number of dice> <number of sides>",
+  usage: [
+    "!roll <number of sides>",
+    "!roll <number of dice> <number of sides>",
+  ],
   key: "roll",
 };
 

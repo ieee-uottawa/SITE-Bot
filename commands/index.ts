@@ -10,7 +10,7 @@ export const commands: Command[] = [Help, Dice, PingPong, Contribute];
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"
   description: string; // Ex: "Roll a die with any sides, default is 6."
-  usage: string[]; // Ex: "!roll <number of sides>"
+  usage: string[]; // Ex: ["!roll <number of sides>"]
   key: string; // Ex: "roll"
 };
 
