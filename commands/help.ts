@@ -1,12 +1,29 @@
 import { Message } from "discord.js";
 import { Action, Command, CommandDefinition, commands } from ".";
-import { help } from "../utils";
 
 export const description: CommandDefinition = {
   name: "Help",
   description: "Prints help text for included commands.",
   usage: ["!help", "!help public"],
   keys: ["help"],
+};
+
+/**
+ * Renders a list of all possible SITE-Bot commands.
+ * @param commands The global list of SITE-Bot commands.
+ */
+export const help = (commands: Command[]): string => {
+  return (
+    "**SITE-Bot - Help Menu**\n\n" +
+    commands
+      .map(
+        (c) =>
+          `**${c.definition.name}**: ${
+            c.definition.description
+          }${c.definition.usage.map((u) => `\n\t${u}`)}\n`
+      )
+      .join("\n")
+  );
 };
 
 /**
