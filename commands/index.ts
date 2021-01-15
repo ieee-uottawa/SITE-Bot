@@ -2,10 +2,11 @@ import Help from "./help";
 import PingPong from "./pingpong";
 import Dice from "./dice";
 import Contribute from "./contribute";
+import Stonk from "./stonk";
 import { Message } from "discord.js";
 
 // To register a command, import it above and add it to this array.
-export const commands: Command[] = [Help, Dice, PingPong, Contribute];
+export const commands: Command[] = [Help, Dice, PingPong, Contribute, Stonk];
 
 export type CommandDefinition = {
   name: string; // Ex: "Dice Rollin' Bot"
