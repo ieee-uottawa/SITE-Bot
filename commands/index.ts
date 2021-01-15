@@ -5,6 +5,7 @@ import Dice from "./dice";
 import Knowledge from "./knowledge";
 import Contribute from "./contribute";
 import Roulette from "./russian-roulette";
+import Stats from "./stats";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
@@ -14,6 +15,7 @@ export const commands: Command[] = [
   Roulette,
   PingPong,
   Contribute,
+  Stats
 ];
 
 export type CommandDefinition = {
