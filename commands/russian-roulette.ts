@@ -37,7 +37,7 @@ function areYouKill(): boolean {
 function unbannable(exception: any, message: Message) {
   const username = message.author.tag.split("#")[0];
   message.channel.send(
-    `I don't have the power to handle ${username}... _yet!_  :smiling_imp:`
+    `_(I don't have the power to handle ${username}... yet!  :smiling_imp: )_`
   );
 }
 
@@ -52,7 +52,7 @@ export const action: Action = (message: Message) => {
   const extreme = isExtreme(message.content);
   const result = areYouKill();
   message.reply(
-    `you spin the barrel, pull the trigger and... ${
+    `you spin the cylinder, pull the trigger and... ${
       result
         ? "**BANG!** _you're dead!_  :skull_and_crossbones:"
         : "nothing happens.  :sweat_smile:"
