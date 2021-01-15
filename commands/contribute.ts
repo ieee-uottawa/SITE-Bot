@@ -28,7 +28,7 @@ export const action = (message: Message) => {
       " https://github.com/ieee-uottawa/SITE-Bot" +
       " and send a pull request."
   );
-  if (!isPublic)
+  if (!isPublic && message.guild)
     message.reply(
       "I've sent you the details! Type `!contribute public` to print the info to this channel."
     );
