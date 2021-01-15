@@ -1,12 +1,29 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition, commands } from ".";
-import { help } from "../utils";
+import { Action, Command, CommandDefinition, commands } from ".";
 
 export const description: CommandDefinition = {
   name: "Help",
   description: "Prints help text for included commands.",
   usage: ["!help", "!help public"],
-  key: "help",
+  keys: ["help"],
+};
+
+/**
+ * Renders a list of all possible SITE-Bot commands.
+ * @param commands The global list of SITE-Bot commands.
+ */
+export const help = (commands: Command[]): string => {
+  return (
+    "**SITE-Bot - Help Menu**\n\n" +
+    commands
+      .map(
+        (c) =>
+          `**${c.definition.name}**: ${
+            c.definition.description
+          }${c.definition.usage.map((u) => `\n\t${u}`)}\n`
+      )
+      .join("\n")
+  );
 };
 
 /**
@@ -19,13 +36,13 @@ function isCommandPublic(content: string): boolean {
   return true;
 }
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   const isPublic = isCommandPublic(message.content);
   const messenger = isPublic ? message.channel : message.author;
 
   messenger.send(help(commands));
-  if (!isPublic)
-    message.channel.send(
+  if (!isPublic && message.guild)
+    message.reply(
       "I've sent you the user manual! Type `!help public` to print the manual to this channel."
     );
 };

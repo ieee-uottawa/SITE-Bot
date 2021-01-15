@@ -1,11 +1,11 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition } from ".";
 
 export const description: CommandDefinition = {
   name: "Contribute",
   description: "Prints instructions for adding a command to the bot.",
   usage: ["!contribute", "!contribute public"],
-  key: "contribute",
+  keys: ["contribute"],
 };
 
 /**
@@ -18,7 +18,7 @@ function isCommandPublic(content: string): boolean {
   return true;
 }
 
-export const action = (message: Message) => {
+export const action: Action = (message: Message) => {
   const isPublic = isCommandPublic(message.content);
   const messenger = isPublic ? message.channel : message.author;
 
@@ -28,8 +28,8 @@ export const action = (message: Message) => {
       " https://github.com/ieee-uottawa/SITE-Bot" +
       " and send a pull request."
   );
-  if (!isPublic)
-    message.channel.send(
+  if (!isPublic && message.guild)
+    message.reply(
       "I've sent you the details! Type `!contribute public` to print the info to this channel."
     );
 };
