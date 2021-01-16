@@ -10,7 +10,10 @@ export const description: CommandDefinition = {
   name: "Translate",
   description:
     "Translates the previous or provided message from English to French by default, or any other language.",
-  usage: ["!translate <model?> (common: 'en-fr' or 'fr-en') <text?>"],
+  usage: [
+    "!translate <language?> (translates last msg sent, even those sent by others)",
+    "!translate <language> <text?>",
+  ],
   keys: ["translate"],
 };
 
@@ -26,17 +29,14 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 function sendApology(message: Message, err: any) {
   message.channel.send(
-    `:skull_crossbones:  An error occured during translation. Call 1-800-DEVELOPER to fix.`
+    `:skull_crossbones:  An error occured during translation.\n ` +
+      `Call 1-800-DEVELOPER to fix. Please don't use this endpoint again ` +
+      `until a server developer OKs it.\n` +
+      "```Error: " +
+      err.toString() +
+      "```"
   );
   console.error(err);
-}
-
-// Functions for Extracting Data from Message
-
-function getLanguageCode(text: string): string | undefined {
-  // Ideally the second element of the message is passed to this function.
-  text = text.replace("-", "").replace("_", "").trim();
-  return undefined;
 }
 
 // Functions for Interacting with IBM APIs
@@ -47,30 +47,32 @@ export const translate = async (
   messageToTranslate: Message
 ) => {
   // Ensure the key/url are present, and return if not:
-  console.log(`APIKEY: ${apiKey}`);
-  console.log(`APIURL: ${apiURL}`);
   if (!(apiKey && apiURL))
     throw new Error("Translation IBM Watson API Key or URL missing.");
 
   // Determine what to translate.
   // If it's just the bang-translate, proceed.
   const split: string[] = message.content.toLowerCase().split(" ");
-  console.log(`[ '${split.join("', '")}' ]`);
+  let text = messageToTranslate.content.trim();
+  let language = "French"; // Translate to French by default.
   if (split.length >= 3) {
-    // First element might be a language code, if not, translate normally.
-    const langCode = getLanguageCode(split[1]);
+    // First element might be a language code.
+    text = split.slice(2).join(" ");
+    language = split[1].toLowerCase();
   } else if (split.length === 2) {
     // Probably a language code, but if not, reply with an error.
-    const langCode = getLanguageCode(split[1]);
-  } else if (split.length === 1) {
-    // Translate the previous message from English to French.
+    language = split[1].toLowerCase();
   }
-  translateIBM(messageToTranslate.content, "fr").then((translation)=>{}).catch()
+
+  // Send to the translation engine.
+  return translateIBM(text, language).then((translation) => {
+    message.reply(`the translation to **${"FR"}** is '${translation}'`);
+  });
 };
 
 export const translateIBM = async (
   text: string,
-  langModel: string
+  language: string
 ): Promise<string> => {
   const languageTranslator = new LanguageTranslatorV3({
     version: "2018-05-01", // Is this really the latest, IBM docs? TODO: Find out.
@@ -82,7 +84,7 @@ export const translateIBM = async (
 
   const translateParams: TranslateParams = {
     text: [text],
-    target: "fr",
+    target: language,
   };
 
   return languageTranslator.translate(translateParams).then((res) => {
