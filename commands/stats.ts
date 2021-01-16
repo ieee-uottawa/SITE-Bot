@@ -23,7 +23,7 @@ export const action = (message : Message, key : string) => {
       const roleCount = message.guild?.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
 
       // If the role is deleted, is @everyone, is a bot role, or has a count of 0, skip
-      if (roleData.deleted || roleName === '@everyone' || roleName === 'YAGPDB.xyz' || roleCount === 0) 
+      if (roleData.deleted || roleName === '@everyone' || roleName === 'YAGPDB.xyz' || roleCount === 0 || roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g)) 
         continue
         
       rollCounts.push(`\`${roleName} members: ${roleCount}\``);
