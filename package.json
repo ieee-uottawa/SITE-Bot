@@ -33,6 +33,7 @@
     "erlpack": "github:discord/erlpack",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
+    "ibm-watson": "^6.0.2",
     "utf-8-validate": "^5.0.4"
   },
   "engines": {
