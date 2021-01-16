@@ -66,7 +66,7 @@ export const translate = async (
 
   // Send to the translation engine.
   return translateIBM(text, language).then((translation) => {
-    message.reply(`the translation to **${"FR"}** is '${translation}'`);
+    message.reply(`the translation to **${language}** is '${translation}'`);
   });
 };
 
