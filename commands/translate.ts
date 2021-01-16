@@ -1,4 +1,4 @@
-import { Message, UserManager } from "discord.js";
+import { Message } from "discord.js";
 import { Action, Command, CommandDefinition } from ".";
 import dotenv from "dotenv";
 import { IamAuthenticator } from "ibm-watson/auth";
@@ -17,6 +17,14 @@ export const description: CommandDefinition = {
   keys: ["translate"],
 };
 
+/**
+ * This command uses the IBM Watson Language Translator J1 resource. A 'Lite' plan
+ * provides 1_000_000 characters of translation, including language detection
+ * (though this isn't immediately disclosed in the API documentation.)
+ *
+ * You'll need to add the API Key and resource URL provided by IBM to use this command.
+ */
+
 // API Keys for IBM Translation Services
 // =====================================
 
@@ -29,9 +37,8 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 function sendApology(message: Message, err: any) {
   message.channel.send(
-    `:skull_crossbones:  An error occured during translation.\n ` +
-      `Call 1-800-DEVELOPER to fix. Please don't use this endpoint again ` +
-      `until a server developer OKs it.\n` +
+    `:skull_crossbones:  An error occured during translation. :fire:\n ` +
+      `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
       "```Error: " +
       err.toString() +
       "```"
@@ -74,6 +81,9 @@ export const translateIBM = async (
   text: string,
   language: string
 ): Promise<string> => {
+  // Performance of this method could potentially be improved by instantiating
+  // the authentication and language translation objects outside of the
+  // function. Problem is, I'm not sure how fast they expire.
   const languageTranslator = new LanguageTranslatorV3({
     version: "2018-05-01", // Is this really the latest, IBM docs? TODO: Find out.
     authenticator: new IamAuthenticator({
@@ -82,6 +92,7 @@ export const translateIBM = async (
     serviceUrl: apiURL,
   });
 
+  //
   const translateParams: TranslateParams = {
     text: [text],
     target: language,
