@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { Command, CommandDefinition, Action } from ".";
 
 export const description: CommandDefinition = {
-  name: "Dice Rollin' Bot",
+  name: "Dice Rollin' Command",
   description: "Roll a die with any sides, default is 6.",
   usage: [
     "!roll <number of sides>",

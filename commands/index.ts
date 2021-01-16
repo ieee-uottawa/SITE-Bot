@@ -12,12 +12,12 @@ import Stonk from "./stonk";
 export const commands: Command[] = [
   Help,
   Translate,
+  Stonk,
   Dice,
   Knowledge,
   Roulette,
   PingPong,
   Contribute,
-  Stonk,
 ];
 
 export type CommandDefinition = {
