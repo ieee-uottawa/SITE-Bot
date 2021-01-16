@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Action, Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition, random } from ".";
 
 export const description: CommandDefinition = {
   name: "Spongebobify",
@@ -35,9 +35,9 @@ function spongebobify(text: string): string {
     return true;
   });
   const uPpEr = noSpecials.map((char) => {
-    if (Math.random() >= 0.5) return char.toUpperCase(); // Half are upper.
+    if (random.bool()) return char.toUpperCase(); // Half are upper.
     if (char === " ") return "  "; // Spaces to double spaces
-    if (Math.random() > 0.7) return char + " "; // Extra spaces sometimes
+    if (random.bool()) return char + " "; // Extra spaces sometimes
     return char;
   });
   return uPpEr.join(" ");
@@ -51,8 +51,8 @@ export const action: Action = (message: Message) => {
     .fetch()
     .then((messageList) => {
       // messageList now contains the last few messages.
-      if (messageList)
-        messageList.every((target) => {
+      if (messageList) {
+        const res = messageList.every((target) => {
           // Continue the loop if the message was from a bot or a bot command.
           if (target.author.bot) return true;
           if (target.content.startsWith("!")) return true;
@@ -60,6 +60,14 @@ export const action: Action = (message: Message) => {
           target.channel.send(spongebobify(target.content));
           return false;
         });
+        if (res === true) {
+          message.channel.send(
+            ":confounded:  The last few messages are bot commands and invocations..."
+          );
+        }
+      } else {
+        throw new Error("Hm, I couldn't grab the last few messages.");
+      }
     })
     .catch((err) => {
       sendApology(message, err);

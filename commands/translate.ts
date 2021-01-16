@@ -115,19 +115,32 @@ export const translateIBM = async (
 // =======================
 
 export const action: Action = (message: Message) => {
-  message.channel.messages.fetch().then((messageList) => {
-    // messageList now contains the last few messages.
-    if (messageList)
-      messageList.every((target) => {
-        // Continue the loop if the message was from a bot or a bot command.
-        if (target.author.bot) return true;
-        if (target.content.startsWith("!")) return true;
-        translate(message, target).catch((err) => {
-          sendApology(message, err);
+  message.channel.messages
+    .fetch()
+    .then((messageList) => {
+      // messageList now contains the last few messages.
+      if (messageList) {
+        const res = messageList.every((target) => {
+          // Continue the loop if the message was from a bot or a bot command.
+          if (target.author.bot) return true;
+          if (target.content.startsWith("!")) return true;
+          translate(message, target).catch((err) => {
+            sendApology(message, err);
+          });
+          return false;
         });
-        return false;
-      });
-  });
+        if (res === true) {
+          message.channel.send(
+            ":confounded:  The last few messages are bot commands and invocations..."
+          );
+        }
+      } else {
+        throw new Error("Hm, I couldn't grab the last few messages.");
+      }
+    })
+    .catch((err) => {
+      sendApology(message, err);
+    });
 };
 
 // Command Exports

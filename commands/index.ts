@@ -1,3 +1,4 @@
+import { MersenneTwister19937, Random } from "random-js";
 import { Message } from "discord.js";
 import Help from "./help";
 import PingPong from "./pingpong";
@@ -68,3 +69,8 @@ export async function handleMessage<Promise>(message: Message) {
     console.log(` - !${c.definition.keys.join(", !")} - ${c.definition.name}`);
   });
 })();
+
+/**
+ * The NodeJS Random engine is terrible, so import and use this instead
+ */
+export const random = new Random(MersenneTwister19937.autoSeed());

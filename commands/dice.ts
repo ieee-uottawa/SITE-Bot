@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Command, CommandDefinition, Action } from ".";
+import { Command, CommandDefinition, Action, random } from ".";
 
 export const description: CommandDefinition = {
   name: "Dice Rollin' Command",
@@ -33,14 +33,6 @@ function parseDieSize(content: string): { num: number; volume: number } {
     const volume = parseInt(match[0]);
     return { num: num, volume: volume };
   } else return { num: 6, volume: 1 };
-}
-
-/**
- * Returns a random number below the maximum.
- * @param max The highest possible roll.
- */
-function getRandomInt(max: number): number {
-  return 1 + Math.floor(Math.random() * Math.floor(max));
 }
 
 // Required Command Exports
@@ -78,7 +70,7 @@ export const action: Action = (message, key) => {
     // Roll the dice.
     const results: number[] = [];
     for (let i = 0; i < dieData.volume; i++) {
-      results.push(getRandomInt(dieData.num));
+      results.push(random.integer(1, dieData.num));
     }
 
     // Respond based on die size.
@@ -91,7 +83,7 @@ export const action: Action = (message, key) => {
     );
   } else {
     // Key is flip
-    const res = Math.random() > 0.5;
+    const res = random.bool();
     const username = message.author.tag.split("#")[0];
     message.channel.send(
       `:coin:  ${username} tossed a coin and... _it's ${
