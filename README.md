@@ -52,7 +52,7 @@ export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
   usage: ["!ping"],
-  key: "ping",
+  keys: ["ping"],
 };
 
 export const action = (message: Message) => {
@@ -87,7 +87,7 @@ export const description: CommandDefinition = {
   name: "Ping Pong",
   description: "Replies with 'Pong!'",
   usage: ["!ping"],
-  key: "ping",
+  keys: ["ping"],
 };
 ```
 
@@ -148,7 +148,7 @@ export const description: CommandDefinition = {
     "!roll <number of sides>",
     "!roll <number of dice> <number of sides>",
   ],
-  key: "roll",
+  keys: ["roll"],
 };
 
 // Functions used by this command
