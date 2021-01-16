@@ -15,14 +15,11 @@ export const description: CommandDefinition = {
 };
 
 export const action: Action = (message : Message, key) => {
+  if (FMP_KEY === undefined) {  message.channel.send("API Key Not Configured"); return; }
+  
   const symbol = message.content.replace("!stonk", "");
   if (symbol === "") {
     message.channel.send("I don't see a symbol... For example, you can do `!stonk ^DJI` or `!stonk WEED`");
-    return;
-  }
-
-  if (FMP_KEY === undefined) {
-    message.channel.send("API Key Not Configured");
     return;
   }
 
