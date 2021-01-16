@@ -63,7 +63,7 @@ export const action: Action = (message: Message) => {
         });
         if (res === true) {
           message.channel.send(
-            ":confounded:  The last few messages are bot commands and invocations..."
+            ":confounded:  The last few messages are bot commands, media, and invocations..."
           );
         }
       } else {
