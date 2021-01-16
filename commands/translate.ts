@@ -88,10 +88,6 @@ export const translateIBM = async (
   };
 
   return languageTranslator.translate(translateParams).then((res) => {
-    res.result.translations.forEach((t) => {
-      console.log(t);
-    });
-    console.log(JSON.stringify(res, null, 2));
     const translation = res.result.translations[0]["translation"];
     return translation;
   });
