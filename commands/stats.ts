@@ -9,6 +9,8 @@ export const description: CommandDefinition = {
 };
 
 export const action = (message : Message, key : string) => {
+    if (!message.guild) {message.author.send("Call me in a server!"); return;}
+    
     const totalMembers= message.guild?.members.cache.size;  
     let botCount = message.guild?.members.cache.filter(m => m.user.bot).size; 
     if (botCount !== undefined) botCount++; // Bot doesn't include itself in the botCount lol
@@ -25,12 +27,10 @@ export const action = (message : Message, key : string) => {
       if (roleData.deleted || roleName === '@everyone' || roleName === 'YAGPDB.xyz' || roleCount === 0) 
         continue
         
-      rollCounts.push(`${roleName} Members: \`${roleCount}\``);
+      rollCounts.push(`\`${roleName} members: ${roleCount}\``);
     }
     
-    let data = `\nTotal Members:  \`${totalMembers}\`\nBot Count: \`${botCount}\`\n`;
-    data += rollCounts.join("\n");
-
+    const data = `here are the stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${totalMembers}\`\n\`Bot Count: ${botCount}\`\n` + rollCounts.join("\n");
     message.reply(data);
 };
 
