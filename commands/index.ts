@@ -17,12 +17,12 @@ export const commands: Command[] = [
   Translate,
   Stonk,
   Dice,
+  Stats,
   Knowledge,
   Spongebob,
   Roulette,
   PingPong,
   Contribute,
-  Stats
 ];
 
 export type CommandDefinition = {

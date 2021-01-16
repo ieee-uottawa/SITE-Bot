@@ -40,7 +40,9 @@ export const action: Action = (message: Message, key) => {
       console.log(JSON.stringify(res));
       if (res === undefined || res.length === 0)
         // Result of an invalid symbol provided
-        message.channel.send("Invalid Symbol provided, but you can try again! :chart_with_upwards_trend:");
+        message.channel.send(
+          "Invalid Symbol provided, but you can try again! :chart_with_upwards_trend:"
+        );
       else if (
         res["Error Message"]?.split(".")[0].trim() === LIMIT_REACHED_RESULT
       )
