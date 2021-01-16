@@ -5,11 +5,13 @@ import Dice from "./dice";
 import Knowledge from "./knowledge";
 import Contribute from "./contribute";
 import Roulette from "./russian-roulette";
+import Translate from "./translate";
 import Stats from "./stats";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
   Help,
+  Translate,
   Dice,
   Knowledge,
   Roulette,
