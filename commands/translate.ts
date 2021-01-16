@@ -124,6 +124,7 @@ export const action: Action = (message: Message) => {
           // Continue the loop if the message was from a bot or a bot command.
           if (target.author.bot) return true;
           if (target.content.startsWith("!")) return true;
+          if (!target.content || target.content.trim() === "") return true;
           translate(message, target).catch((err) => {
             sendApology(message, err);
           });
