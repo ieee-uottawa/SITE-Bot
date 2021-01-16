@@ -8,31 +8,33 @@ export const description: CommandDefinition = {
   keys: ["stats"],
 };
 
-export const action = (message: Message) => {
+export const action = (message : Message, key : string) => {
     const totalMembers= message.guild?.members.cache.size;  
     let botCount = message.guild?.members.cache.filter(m => m.user.bot).size; 
     if (botCount !== undefined) botCount++; // Bot doesn't include itself in the botCount lol
 
     //Get role counts
     let rollCounts : {rName:string; count:number}[] = [];
+    const rolesJSON : any = message.guild?.roles.cache.toJSON(); // convert role Map Collection to JSON
+    for (const key in rolesJSON) { // Iterate through each role object
+      const roleData : any = rolesJSON[key];
+      const roleName = roleData.name; 
+      const roleCount = message.guild?.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
 
-    const rolesJSON = message.guild?.roles.cache.toJSON();
-    for (const key in rolesJSON) {
-      const roleData = rolesJSON[key]; // TODO - figure out warning 
-      console.log(roleData);
-      if (roleData.deleted || roleData.name === '@everyone' || roleData.name === 'YAGPDB.xyz') 
+      // If the role is deleted, is @everyone, is a bot role, or has a count of 0, skip
+      if (roleData.deleted || roleName === '@everyone' || roleName === 'YAGPDB.xyz' || roleCount === 0) 
         continue
-      
+
       rollCounts.push({
-        rName: roleData.name,
-        count: message.guild?.roles.cache.get(roleData.id)?.members.size!
+        rName: roleName,
+        count: roleCount
       }); 
     }
     
-    var data = `Total Members: ${totalMembers}\nBot Count: ${botCount}\n`;
-    for (var index in rollCounts) {
+    let data = `Total Members: ${totalMembers}\nBot Count: ${botCount}\n`;
+    for (var index in rollCounts) // Append all rollCounts to the final message to send
       data += `${rollCounts[index].rName} Members: ${rollCounts[index].count}\n`
-    }
+
     message.author.send(data);
 };
 
