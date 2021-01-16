@@ -5,6 +5,7 @@ import fetch from "node-fetch";
 
 dotenv.config();
 const FMP_KEY = process.env.FMP_API_KEY || undefined;
+const LIMIT_REACHED_RESULT = 'Limit Reach';
 
 export const description: CommandDefinition = {
   name: "Stonk Watcher",
@@ -13,9 +14,12 @@ export const description: CommandDefinition = {
   keys: ["stonk"],
 };
 
-export const action: Action = (message, key) => {
+export const action: Action = (message : Message, key) => {
   const symbol = message.content.replace("!stonk", "");
-  if (symbol === "") return; 
+  if (symbol === "") {
+    message.channel.send("I don't see a symbol... For example, you can do `!stonk ^DJI` or `!stonk WEED`");
+    return;
+  }
 
   if (FMP_KEY === undefined) {
     message.channel.send("API Key Not Configured");
@@ -23,17 +27,22 @@ export const action: Action = (message, key) => {
   }
 
   fetch(`https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${FMP_KEY}`)
-  .then((data: any) => data.json())
+  .then((response : any) => {
+    if (response.status !== 200)
+      throw new Error("API Not OK");
+    return response.json();
+  })
   .then((res: any) => {
-      let stockInfo;
-      if (res === undefined || res.length === 0 ) // TODO: Figure out what happens to `res` when no API calls remain 
-          stockInfo = "Error: Invalid Symbol, or No More Calls Remaining";
+      if (res === undefined || res.length === 0 )  // Result of an invalid symbol provided
+        message.channel.send("Invalid Symbol provided, but you can try again!");
+      else if (res['Error Message']?.split('.')[0].trim() === LIMIT_REACHED_RESULT) // API Limit Reached
+        message.channel.send("API Limit Reached for the day, `!stonk` is on vacation!");
       else
-          stockInfo = `${res[0].name}\nCurrent: $${res[0].price}\nChange: ${res[0].changesPercentage}%\nOpen: $${res[0].open}\nPrevious Close: $${res[0].previousClose}`
-      message.channel.send(stockInfo);
+        message.channel.send(`${res[0].name}\nCurrent: $${res[0].price}\nChange: ${res[0].changesPercentage}%\nOpen: $${res[0].open}\nPrevious Close: $${res[0].previousClose}`);
   })
   .catch((err: any) => {
-    
+    console.error(err);
+    message.channel.send("Whoops... Looks like the API hit an error, let's give it a break.");
   });
 };
 
