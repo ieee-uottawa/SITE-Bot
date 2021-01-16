@@ -61,7 +61,7 @@ export const translate = async (
   // If it's just the bang-translate, proceed.
   const split: string[] = message.content.toLowerCase().split(" ");
   let text = messageToTranslate.content.trim();
-  let language = "French"; // Translate to French by default.
+  let language: string = ""; // Translate to French by default.
   if (split.length >= 3) {
     // First element might be a language code.
     text = split.slice(2).join(" ");
@@ -69,6 +69,10 @@ export const translate = async (
   } else if (split.length === 2) {
     // Probably a language code, but if not, reply with an error.
     language = split[1].toLowerCase();
+  } else {
+    return translateIBM(text, "", "en-fr").then((translation) => {
+      message.reply(`the French translation is '${translation}'`);
+    });
   }
 
   // Send to the translation engine.
@@ -79,7 +83,8 @@ export const translate = async (
 
 export const translateIBM = async (
   text: string,
-  language: string
+  language: string = "",
+  model: string = ""
 ): Promise<string> => {
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
@@ -92,11 +97,13 @@ export const translateIBM = async (
     serviceUrl: apiURL,
   });
 
-  //
-  const translateParams: TranslateParams = {
-    text: [text],
-    target: language,
-  };
+  if (language && model)
+    throw new Error("Please provide a language OR model for translation.");
+
+  // Build translation parameters.
+  const translateParams: TranslateParams = { text: [text] };
+  if (language) translateParams["target"] = language;
+  if (model) translateParams["modelId"] = model;
 
   return languageTranslator.translate(translateParams).then((res) => {
     const translation = res.result.translations[0]["translation"];
@@ -108,19 +115,33 @@ export const translateIBM = async (
 // =======================
 
 export const action: Action = (message: Message) => {
-  message.channel.messages.fetch().then((messageList) => {
-    // messageList now contains the last few messages.
-    if (messageList)
-      messageList.every((target) => {
-        // Continue the loop if the message was from a bot or a bot command.
-        if (target.author.bot) return true;
-        if (target.content.startsWith("!")) return true;
-        translate(message, target).catch((err) => {
-          sendApology(message, err);
+  message.channel.messages
+    .fetch()
+    .then((messageList) => {
+      // messageList now contains the last few messages.
+      if (messageList) {
+        const res = messageList.every((target) => {
+          // Continue the loop if the message was from a bot or a bot command.
+          if (target.author.bot) return true;
+          if (target.content.startsWith("!")) return true;
+          if (!target.content || target.content.trim() === "") return true;
+          translate(message, target).catch((err) => {
+            sendApology(message, err);
+          });
+          return false;
         });
-        return false;
-      });
-  });
+        if (res === true) {
+          message.channel.send(
+            ":confounded:  The last few messages are bot commands, media, and invocations..."
+          );
+        }
+      } else {
+        throw new Error("Hm, I couldn't grab the last few messages.");
+      }
+    })
+    .catch((err) => {
+      sendApology(message, err);
+    });
 };
 
 // Command Exports

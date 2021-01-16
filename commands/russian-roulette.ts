@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Action, Command, CommandDefinition } from ".";
+import { Action, Command, CommandDefinition, random } from ".";
 
 export const description: CommandDefinition = {
   name: "Russian Roulette",
@@ -17,16 +17,6 @@ function isExtreme(content: string): boolean {
   const match = content.toLowerCase().match(/\b(\w*extreme\w*)\b/g);
   if (match === null) return false; // Quit early if no matches found.
   return true;
-}
-
-/**
- * Returns a 1/6 chance of killing the user.
- */
-function areYouKill(): boolean {
-  const random = Math.random();
-  console.log(`Res: ${random}`);
-  // Random number seem to concentrate about 5, so let's use this to our advantage.
-  return random >= 2 / 5 && random <= 3 / 5;
 }
 
 /**
@@ -50,7 +40,7 @@ export const action: Action = (message: Message) => {
 
   // Otherwise, pull the trigger.
   const extreme = isExtreme(message.content);
-  const result = areYouKill();
+  const result = random.bool(1, 5); // 1/5 chance of death.
   message.reply(
     `you spin the cylinder, pull the trigger and... ${
       result

@@ -32,8 +32,9 @@
     "dotenv": "^8.2.0",
     "erlpack": "github:discord/erlpack",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.1",
     "ibm-watson": "^6.0.2",
+    "node-fetch": "^2.6.1",
+    "random-js": "^2.1.0",
     "utf-8-validate": "^5.0.4"
   },
   "engines": {

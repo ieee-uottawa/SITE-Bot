@@ -1,3 +1,4 @@
+import { MersenneTwister19937, Random } from "random-js";
 import { Message } from "discord.js";
 import Help from "./help";
 import PingPong from "./pingpong";
@@ -8,6 +9,7 @@ import Roulette from "./russian-roulette";
 import Translate from "./translate";
 import Stats from "./stats";
 import Stonk from "./stonk";
+import Spongebob from "./spongebob";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
@@ -16,6 +18,7 @@ export const commands: Command[] = [
   Stonk,
   Dice,
   Knowledge,
+  Spongebob,
   Roulette,
   PingPong,
   Contribute,
@@ -68,3 +71,8 @@ export async function handleMessage<Promise>(message: Message) {
     console.log(` - !${c.definition.keys.join(", !")} - ${c.definition.name}`);
   });
 })();
+
+/**
+ * The NodeJS Random engine is terrible, so import and use this instead
+ */
+export const random = new Random(MersenneTwister19937.autoSeed());
