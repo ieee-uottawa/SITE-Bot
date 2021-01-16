@@ -7,6 +7,7 @@ import Knowledge from "./knowledge";
 import Contribute from "./contribute";
 import Roulette from "./russian-roulette";
 import Translate from "./translate";
+import Stats from "./stats";
 import Stonk from "./stonk";
 import Spongebob from "./spongebob";
 
@@ -21,6 +22,7 @@ export const commands: Command[] = [
   Roulette,
   PingPong,
   Contribute,
+  Stats
 ];
 
 export type CommandDefinition = {

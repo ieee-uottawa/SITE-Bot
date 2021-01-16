@@ -40,17 +40,17 @@ export const action: Action = (message: Message, key) => {
       console.log(JSON.stringify(res));
       if (res === undefined || res.length === 0)
         // Result of an invalid symbol provided
-        message.channel.send("Invalid Symbol provided, but you can try again!");
+        message.channel.send("Invalid Symbol provided, but you can try again! :chart_with_upwards_trend:");
       else if (
         res["Error Message"]?.split(".")[0].trim() === LIMIT_REACHED_RESULT
       )
         // API Limit Reached
         message.channel.send(
-          "API Limit Reached for the day, `!stonk` is on vacation!"
+          "API Limit Reached for the day, `!stonk` is on vacation! :chart_with_upwards_trend:"
         );
       else
         message.channel.send(
-          `**${symbol} - ${res[0].name}**\nCurrent: \`$${res[0].price}\`\nChange: \`${res[0].changesPercentage}%\`\nOpen: \`$${res[0].open}\`\nPrevious Close: \`$${res[0].previousClose}\``
+          `**${symbol} - ${res[0].name}** :chart_with_upwards_trend:\nExchange: \`${res[0].exchange}\`\nCurrent: \`$${res[0].price}\`\nChange: \`${res[0].changesPercentage}%\`\nOpen: \`$${res[0].open}\`\nPrevious Close: \`$${res[0].previousClose}\``
         );
     })
     .catch((err: any) => {
