@@ -9,7 +9,7 @@ import LanguageTranslatorV3, {
 export const description: CommandDefinition = {
   name: "Translate",
   description:
-    "Translates the previous or provided message from English to French by default, or any other language.",
+    "Translates the previous or provided message to French by default, or any other language.",
   usage: [
     "!translate <language?> (translates last msg sent, even those sent by others)",
     "!translate <language> <text?>",
