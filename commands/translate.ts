@@ -118,8 +118,7 @@ export const translateList = async (
 
 export const translateIBM = async (
   text: string,
-  language: string = "",
-  model: string = ""
+  language: string = ""
 ): Promise<string> => {
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
@@ -132,13 +131,12 @@ export const translateIBM = async (
     serviceUrl: apiURL,
   });
 
-  if (language && model)
+  if (language && "")
     throw new Error("Please provide a language for translation.");
 
   // Build translation parameters.
   const translateParams: TranslateParams = { text: [text] };
   if (language) translateParams["target"] = language;
-  if (model) translateParams["modelId"] = model;
 
   return languageTranslator.translate(translateParams).then((res) => {
     const translation = res.result.translations[0]["translation"];
