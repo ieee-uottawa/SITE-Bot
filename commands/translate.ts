@@ -70,15 +70,50 @@ export const translate = async (
     // Probably a language code, but if not, reply with an error.
     language = split[1].toLowerCase();
   } else {
-    return translateIBM(text, "", "en-fr").then((translation) => {
+    return translateIBM(text, "french").then((translation) => {
       message.reply(`the French translation is '${translation}'`);
     });
   }
 
+  // Gets the possible translation languages
+  if(language=="list"){
+    return translateList().then((languagelist) => {
+      message.reply(`the available language to translate are '${languagelist}'`);
+    });
+  }
   // Send to the translation engine.
   return translateIBM(text, language).then((translation) => {
     message.reply(`the translation to **${language}** is '${translation}'`);
   });
+};
+
+export const translateList = async (
+): Promise<string> => {
+  // Performance of this method could potentially be improved by instantiating
+  // the authentication and language translation objects outside of the
+  // function. Problem is, I'm not sure how fast they expire.
+  const languageTranslator = new LanguageTranslatorV3({
+    version: "2018-05-01", // Is this really the latest, IBM docs? TODO: Find out.
+    authenticator: new IamAuthenticator({
+      apikey: apiKey,
+    }),
+    serviceUrl: apiURL,
+  });
+  let buildlist:string[]=[]; // array will build with all supported language
+  return languageTranslator.listLanguages()
+  .then(languages => {
+    languages.result.languages.forEach(function (value){
+      if(value.supported_as_target){
+        buildlist.push(`${value.language_name}`); // check if the language is suported, if yes then it adds it to the buildlist array 
+      }
+    });
+    const languagelist ='```'+ buildlist.join("\n")+'```';
+    return languagelist;
+    return "hh";
+  }).catch(err => {
+    console.log('error:', err);
+    return "";
+  }); 
 };
 
 export const translateIBM = async (
@@ -98,7 +133,7 @@ export const translateIBM = async (
   });
 
   if (language && model)
-    throw new Error("Please provide a language OR model for translation.");
+    throw new Error("Please provide a language for translation.");
 
   // Build translation parameters.
   const translateParams: TranslateParams = { text: [text] };
