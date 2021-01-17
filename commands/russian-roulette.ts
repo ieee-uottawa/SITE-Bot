@@ -40,7 +40,7 @@ export const action: Action = (message: Message) => {
 
   // Otherwise, pull the trigger.
   const extreme = isExtreme(message.content);
-  const result = random.bool(1, 5); // 1/5 chance of death.
+  const result = random.bool(1, 3); // 1/3 chance of death. (Higher than advertised.)
   message.reply(
     `you spin the cylinder, pull the trigger and... ${
       result
