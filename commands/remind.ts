@@ -43,7 +43,7 @@ export const action = (message: Message, key: string) => {
   // Fetch all members whose highest role is equal to the role mentioned in the command
   const memberList = message.guild.members.cache.filter((m) => m.roles.highest.name === paramArray[0]);
   if (memberList.size == 0) { // Quit if role is invalid
-    message.reply("I don't recognize that role, perhaps there is a typo in it?");
+    message.reply("I don't recognize that role, perhaps there is a typo in it, or no user is categorized by it.");
     return;
   }
 
