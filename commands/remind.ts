@@ -54,6 +54,7 @@ export const action = (message: Message, key: string) => {
       user.send(paramArray[1]); // Send the current member a DM
     })
   }
+  message.reply("Succesfully sent to " + memberList.size + " members");
 };
 
 export const command: Command = {
