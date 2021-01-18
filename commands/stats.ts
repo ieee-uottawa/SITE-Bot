@@ -21,6 +21,7 @@ export const action = (message: Message, key: string) => {
   }
   const totalCount = message.guild.memberCount;
   const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
+  const noRoleCount = message.guild.members.cache.filter((m) => m.roles.highest.name === "@everyone").size;
   const userCount = totalCount - botCount;
 
   //Get role counts - organized under year, program, association, pronoun & miscellaneous
@@ -52,7 +53,7 @@ export const action = (message: Message, key: string) => {
   }
 
   const data =
-    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n` +
+    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`No Role Count: ${noRoleCount}\`\n` +
     rollCounts.year.sort().join("\n") + `\n` + 
     rollCounts.assoc.join("\n") + `\n` +
     rollCounts.program.join("\n") + `\n` +
