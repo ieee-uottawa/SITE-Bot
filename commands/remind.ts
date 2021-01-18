@@ -8,8 +8,14 @@ export const description: CommandDefinition = {
   keys: ["remind"],
 };
 
+/**
+ * Splits the paramaters provided into an array 
+ * Will quit early if Regex match is undefiend or if code syntax is missing
+ * @param content The message provided by the user.
+ * @return An array of two elements: the target role, and the message to send
+ */
 function parseMessage(content : string) : string[] {
-  const paramArray = content.replace("!remind ", "").match(/^(\S+)\s(.*)/)?.slice(1);
+  const paramArray = content.replace("!remind ", "").match(/^(\S+)\s(.*)/)?.slice(1); 
   if (paramArray === undefined) return []; // Quit if invalid format was passed 
   if(paramArray[0].match(/`/gi)?.length !== 2) return [] // Quit if missing code syntax
   paramArray[0] = paramArray[0].slice(1,-1); // Slice off the code syntax (no longer needed)
@@ -21,7 +27,7 @@ export const action = (message: Message, key: string) => {
     message.author.send("Call me in a server!");
     return;
   } 
-  
+
   const highestRole = message.member?.roles.highest.name // Request must be from Admin or Mod
   if (!(highestRole === "Admin" || highestRole === "Mod")) {
     message.reply("Sorry! I only accept !remind requests from Admins or Mods");
