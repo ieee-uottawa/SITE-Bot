@@ -9,7 +9,7 @@ import LanguageTranslatorV3, {
 export const description: CommandDefinition = {
   name: "Translate",
   description:
-    "Translates the previous or provided message to French by default, or any other language.",
+    "Translates the previous or provided message from English to French by default, or any other language.",
   usage: [
     "!translate <language?> (translates last msg sent, even those sent by others)",
     "!translate <language> <text?>",
@@ -70,7 +70,7 @@ export const translate = async (
     // Probably a language code, but if not, reply with an error.
     language = split[1].toLowerCase();
   } else {
-    return translateIBM(text, "french").then((translation) => {
+    return translateIBM(text, "", "en-fr").then((translation) => {
       message.reply(`the French translation is '${translation}'`);
     });
   }
@@ -117,7 +117,8 @@ export const translateList = async (): Promise<string> => {
 
 export const translateIBM = async (
   text: string,
-  language: string = ""
+  language: string = "",
+  model: string = ""
 ): Promise<string> => {
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
@@ -130,12 +131,13 @@ export const translateIBM = async (
     serviceUrl: apiURL,
   });
 
-  if (language && "")
-    throw new Error("Please provide a language for translation.");
+  if (language && model)
+    throw new Error("Please provide a language OR model for translation.");
 
   // Build translation parameters.
   const translateParams: TranslateParams = { text: [text] };
   if (language) translateParams["target"] = language;
+  if (model) translateParams["modelId"] = model;
 
   return languageTranslator.translate(translateParams).then((res) => {
     const translation = res.result.translations[0]["translation"];
