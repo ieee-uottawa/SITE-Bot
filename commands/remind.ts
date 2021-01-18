@@ -11,8 +11,8 @@ export const description: CommandDefinition = {
 function parseMessage(content : string) : string[] {
   const paramArray = content.replace("!remind ", "").match(/^(\S+)\s(.*)/)?.slice(1);
   if (paramArray === undefined) return []; // Quit if invalid format was passed 
-  paramArray[0] = paramArray[0].slice(1, -1); // Take off the ` ` symbols surround the role
-  if (paramArray[0] === "") return []; // Quit if user didn't wrap role with ` `
+  if(paramArray[0].match(/`/gi)?.length !== 2) return [] // Quit if missing code syntax
+  paramArray[0] = paramArray[0].slice(1,-1);
   return paramArray;
 }
 
@@ -21,6 +21,7 @@ export const action = (message: Message, key: string) => {
     message.author.send("Call me in a server!");
     return;
   } 
+  
   const highestRole = message.member?.roles.highest.name // Request must be from Admin or Mod
   if (!(highestRole === "Admin" || highestRole === "Mod")) {
     message.reply("Sorry! I only accept !remind requests from Admins or Mods");
@@ -32,17 +33,19 @@ export const action = (message: Message, key: string) => {
     message.reply("I couldn't understand your request... For example you can do !remind `Mod` Hi all Mods!. Please make sure to wrap the role in `code syntax`!");
     return;
   }
-
-  const targetRole = paramArray[0];
-  const messageToSend = paramArray[1];
   
   // Fetch all members whose highest role is equal to the role mentioned in the command
-  const memberList = message.guild.members.cache.filter((m) => m.roles.highest.name === targetRole);
+  const memberList = message.guild.members.cache.filter((m) => m.roles.highest.name === paramArray[0]);
+  if (memberList.size == 0) { // Quit if role is invalid
+    message.reply("I don't recognize that role, perhaps there is a typo in it?");
+    return;
+  }
+
   const membersJSON : any = memberList.toJSON(); 
   for (const key in membersJSON) { // Iterate through each member JSON
     message.guild.members.fetch(membersJSON[key].userID) // Fetch the member based on ID
     .then((user : any) => {
-      user.send(messageToSend); // Send the current member a DM
+      user.send(paramArray[1]); // Send the current member a DM
     })
   }
 };
