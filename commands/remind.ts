@@ -40,13 +40,15 @@ export const action = (message: Message, key: string) => {
     return;
   }
   
-  // Fetch all members whose highest role is equal to the role mentioned in the command
-  const memberList = message.guild.members.cache.filter((m) => m.roles.highest.name === paramArray[0] && !m.user.bot);
-  if (memberList.size == 0) { // Quit if role is invalid
+  // Fetch the role ID of the role name provided
+  const roleId = message.guild.roles.cache.find(r => r.name === paramArray[0])?.id;
+  if (roleId === undefined) { // Quit if role is invalid
     message.reply("I don't recognize that role, perhaps there is a typo in it, or no user is categorized by it.");
     return;
   }
-
+  
+  // Fetch all members that are a part of the role provided
+  const memberList = message.guild.members.cache.filter((m) => m.roles.cache.has(roleId) && !m.user.bot);
   const membersJSON : any = memberList.toJSON(); 
   for (const key in membersJSON) { // Iterate through each member JSON
     message.guild.members.fetch(membersJSON[key].userID) // Fetch the member based on ID
