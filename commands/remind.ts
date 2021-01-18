@@ -47,7 +47,7 @@ export const action = (message: Message, key: string) => {
     return;
   }
   
-  // Fetch all members that are a part of the role provided
+  // Fetch all members that are a part of the retrieved roleID 
   const memberList = message.guild.members.cache.filter((m) => m.roles.cache.has(roleId) && !m.user.bot);
   const membersJSON : any = memberList.toJSON(); 
   for (const key in membersJSON) { // Iterate through each member JSON

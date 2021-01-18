@@ -23,7 +23,7 @@ export const action = (message: Message, key: string) => {
   const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
   const userCount = totalCount - botCount;
 
-  // Coun users who are still categorized as "New Member"
+  // Count users who are still categorized as "New Member"
   const newMemberRoleID = message.guild.roles.cache.find(r => r.name === "New Member")?.id!;
   const newMemberCount = message.guild.members.cache.filter((m) => m.roles.cache.has(newMemberRoleID)).size;
 
@@ -37,15 +37,15 @@ export const action = (message: Message, key: string) => {
     const roleCount =
       message.guild?.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
 
-    // If the role is deleted, is @everyone, is a bot role, or has a count of 0, skip
+    // Do not include any of the roles satisfying any of these criterias: 
     if (
       roleData.deleted ||
+      roleCount === 0 || 
       roleName === "@everyone" ||
       roleName === "YAGPDB.xyz" ||
       roleName === "Bot" ||
-      roleName === "New Member" ||
-      roleCount === 0 ||
-      roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g)
+      roleName === "New Member" || // Skip New Member role (we already have it)
+      roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g) // Skip all course code roles
     )
       continue;
     
