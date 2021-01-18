@@ -8,7 +8,7 @@ import ToneAnalyzerV3, {
 
 export const description: CommandDefinition={
     name: "Tone",
-    description: "Analyzes the previous or provided message for the emotion",
+    description: "Analyzes the previous or provided message for the emotion, it will indicate all the emotion perseved from strongest to weakest if there is more then one",
     usage: [
         "!tone",
         "!tone <text?>",
@@ -27,9 +27,6 @@ export const description: CommandDefinition={
 dotenv.config();
 const apiKey = process.env.IBM_TONE_API_KEY?.toString() || "";
 const apiURL = process.env.IBM_TONE_API_URL?.toString() || "";
-
-// Functions for Errors and Error Handling
-// =======================================
 
 // Functions for Errors and Error Handling
 // =======================================
@@ -58,16 +55,15 @@ export const translate = async (
     // Determine what to analyze.
     const split: string[] = message.content.toLowerCase().split(" ");
     let text = messageToAnalyze.content.trim();
-    let language: string = ""; // Translate to French by default.
-    if (split.length >= 3) {
-      // First element might be a language code.
+    let language: string = "";
+    if (split.length >= 3) {// check if the message is after the !tone command
       text = split.slice(1).join(" ");
     } else {
       return analyzeTone(text).then((tone) => {
         message.reply(`Here are the emotions i was able to get from the message; ${tone}`);
       });
     }
-    // Send to the translation engine.
+    // Send to be analyzed.
     return analyzeTone(text).then((tone) => {
         message.reply(`Here are the emotions i was able to get from the message; ${tone}`);
     });

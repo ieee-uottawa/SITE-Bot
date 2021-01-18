@@ -87,8 +87,7 @@ export const translate = async (
   });
 };
 
-export const translateList = async (
-): Promise<string> => {
+export const translateList = async (): Promise<string> => {
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
   // function. Problem is, I'm not sure how fast they expire.
