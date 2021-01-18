@@ -1,6 +1,12 @@
 import { Message } from "discord.js";
 import { Command, CommandDefinition, Action } from ".";
 
+// Allows for proper organization of the roll counts
+const PROGRAMS : string[] = ["CEG", "CSI", "SEG", "ELG", "CHG", "CVG", "BMG", "MCG", "COMP TECH"];
+const YEARS : string[] = ["1st year", "2nd year", "3rd year", "4th year", "5th year", "upper year"];
+const ASSOCIATIONS : string[] = ["IEEE", "CSSA", "ESS"];
+const PRONOUNS : string[] = ["he/him", "she/her", "they/them"];
+
 export const description: CommandDefinition = {
   name: "Server Stat Hoarder",
   description: "Displays user and role statistics.",
@@ -15,10 +21,11 @@ export const action = (message: Message, key: string) => {
   }
   const totalCount = message.guild.memberCount;
   const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
+  const noRoleCount = message.guild.members.cache.filter((m) => m.roles.highest.name === "@everyone").size;
   const userCount = totalCount - botCount;
 
-  //Get role counts
-  let rollCounts: string[] = [];
+  //Get role counts - organized under year, program, association, pronoun & miscellaneous
+  let rollCounts: {[key: string]: string[]} = {year:[], program:[], assoc:[], pronoun:[], misc:[]};
   const rolesJSON: any = message.guild?.roles.cache.toJSON(); // convert role Map Collection to JSON
   for (const key in rolesJSON) {
     // Iterate through each role object
@@ -32,17 +39,26 @@ export const action = (message: Message, key: string) => {
       roleData.deleted ||
       roleName === "@everyone" ||
       roleName === "YAGPDB.xyz" ||
+      roleName === "Bot" ||
       roleCount === 0 ||
       roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g)
     )
       continue;
-
-    rollCounts.push(`\`${roleName} members: ${roleCount}\``);
+    
+    if (YEARS.indexOf(roleName) !== -1) rollCounts.year.push(`\`${roleName}: ${roleCount}\``);
+    else if (ASSOCIATIONS.indexOf(roleName) !== -1) rollCounts.assoc.push(`\`${roleName}: ${roleCount}\``);
+    else if (PROGRAMS.indexOf(roleName) !== -1) rollCounts.program.push(`\`${roleName}: ${roleCount}\``);
+    else if (PRONOUNS.indexOf(roleName) !== -1) rollCounts.pronoun.push(`\`${roleName}: ${roleCount}\``);
+    else rollCounts.misc.push(`\`${roleName}: ${roleCount}\``);
   }
 
   const data =
-    `here are the stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n` +
-    rollCounts.join("\n");
+    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`No Role Count: ${noRoleCount}\`\n` +
+    rollCounts.year.sort().join("\n") + `\n` + 
+    rollCounts.assoc.join("\n") + `\n` +
+    rollCounts.program.join("\n") + `\n` +
+    rollCounts.pronoun.join("\n") + `\n` +
+    rollCounts.misc.join("\n");
   message.reply(data);
 };
 
