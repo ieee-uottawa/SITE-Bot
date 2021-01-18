@@ -21,8 +21,11 @@ export const action = (message: Message, key: string) => {
   }
   const totalCount = message.guild.memberCount;
   const botCount = message.guild.members.cache.filter((m) => m.user.bot).size;
-  const noRoleCount = message.guild.members.cache.filter((m) => m.roles.highest.name === "@everyone").size;
   const userCount = totalCount - botCount;
+
+  // Count users who are still categorized as "New Member"
+  const newMemberRoleID = message.guild.roles.cache.find(r => r.name === "New Member")?.id!;
+  const newMemberCount = message.guild.members.cache.filter((m) => m.roles.cache.has(newMemberRoleID)).size;
 
   //Get role counts - organized under year, program, association, pronoun & miscellaneous
   let rollCounts: {[key: string]: string[]} = {year:[], program:[], assoc:[], pronoun:[], misc:[]};
@@ -34,14 +37,15 @@ export const action = (message: Message, key: string) => {
     const roleCount =
       message.guild?.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
 
-    // If the role is deleted, is @everyone, is a bot role, or has a count of 0, skip
+    // Do not include any of the roles satisfying any of these criterias: 
     if (
       roleData.deleted ||
+      roleCount === 0 || 
       roleName === "@everyone" ||
       roleName === "YAGPDB.xyz" ||
       roleName === "Bot" ||
-      roleCount === 0 ||
-      roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g)
+      roleName === "New Member" || // Skip New Member role (we already have it)
+      roleName.toLowerCase().match(/([a-z][a-z][a-z][0-9][0-9][0-9][0-9])/g) // Skip all course code roles
     )
       continue;
     
@@ -53,7 +57,7 @@ export const action = (message: Message, key: string) => {
   }
 
   const data =
-    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`No Role Count: ${noRoleCount}\`\n` +
+    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`New Member Count: ${newMemberCount}\`\n` +
     rollCounts.year.sort().join("\n") + `\n` + 
     rollCounts.assoc.join("\n") + `\n` +
     rollCounts.program.join("\n") + `\n` +
