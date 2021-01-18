@@ -10,6 +10,7 @@ import Translate from "./translate";
 import Stats from "./stats";
 import Stonk from "./stonk";
 import Spongebob from "./spongebob";
+import Remind from "./remind";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
@@ -23,6 +24,7 @@ export const commands: Command[] = [
   Roulette,
   PingPong,
   Contribute,
+  Remind
 ];
 
 export type CommandDefinition = {
