@@ -12,7 +12,7 @@ function parseMessage(content : string) : string[] {
   const paramArray = content.replace("!remind ", "").match(/^(\S+)\s(.*)/)?.slice(1);
   if (paramArray === undefined) return []; // Quit if invalid format was passed 
   if(paramArray[0].match(/`/gi)?.length !== 2) return [] // Quit if missing code syntax
-  paramArray[0] = paramArray[0].slice(1,-1);
+  paramArray[0] = paramArray[0].slice(1,-1); // Slice off the code syntax (no longer needed)
   return paramArray;
 }
 
