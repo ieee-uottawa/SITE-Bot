@@ -50,11 +50,16 @@ export const action = (message: Message, key: string) => {
   const membersJSON : any = memberList.toJSON(); 
   for (const key in membersJSON) { // Iterate through each member JSON
     message.guild.members.fetch(membersJSON[key].userID) // Fetch the member based on ID
-    .then((user : any) => {
-      user.send(paramArray[1]); // Send the current member a DM
+    .then((user : any) => { // Send the current member a DM
+        user.send(
+            `**You've got mail! :mailbox_with_mail:**\n` + 
+            `You are receiving this message because you are categorized under the following role: ${paramArray[0]}\n\n*` +
+            paramArray[1] + 
+            `*\n\nThis automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}**`
+        ); 
     })
   }
-  message.reply("Succesfully sent to " + memberList.size + " members");
+  message.reply("message has been sent to " + memberList.size + " members");
 };
 
 export const command: Command = {
