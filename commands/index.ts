@@ -10,11 +10,13 @@ import Translate from "./translate";
 import Stats from "./stats";
 import Stonk from "./stonk";
 import Spongebob from "./spongebob";
+import Tone from "./tone";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
   Help,
   Translate,
+  Tone,
   Stonk,
   Dice,
   Stats,
