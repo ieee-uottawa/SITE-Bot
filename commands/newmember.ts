@@ -19,17 +19,11 @@ function noperms(exception: any, message: Message) {
 
 export const action: Action = (message: Message, key: string) => {
 
-
-    
-
-
     //Check if the caller is a Mod or Admin
     if(message.member?.roles.cache.some((role => role.name === 'Mod')) || message.member?.roles.cache.some(role => role.name === 'Admin')) {
         message.reply("Beginning scan...");
 
-
         var newMemberRole: Role | null = null;
-
 
         //Get role for "New Member"
         message.guild?.roles.cache.forEach(role => {
@@ -47,9 +41,6 @@ export const action: Action = (message: Message, key: string) => {
         var removedCount = 0;
         var addedCount = 0;
         
-
-        
-
         // Iterate through ever member
         message.guild?.members.cache.forEach(member => {            
 
@@ -59,11 +50,13 @@ export const action: Action = (message: Message, key: string) => {
                     
                     //If member does not already have the new member role, add it
                     if (!(member.roles.cache.some(role => role.name === "New Member"))) {
+                        
                         member.roles.add(newMemberRole)
                         .catch((exception) => noperms(exception, message));
-
                         addedCount++;
+
                     }
+                    
                 } else {
 
                     //If member already has the new role, remove it
@@ -71,6 +64,7 @@ export const action: Action = (message: Message, key: string) => {
                         member.roles.remove(newMemberRole);
                         removedCount++;
                     }
+
                 }
         });
         message.reply(`Finished scan.\nAdded ${addedCount}.\nRemoved ${removedCount}.`)
