@@ -36,18 +36,21 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 // Functions for Errors and Error Handling
 // =======================================
 
-
 function sendApology(message: Message, err: any) {
-  if(err.code==404){
+  if (err.code == 404) {
     translateList().then((languagelist) => {
-      message.channel.send( `The language you choose is not suported, here is a list of what is suported:${languagelist}`);
+      message.channel.send(
+        `The language you choose is not suported, here is a list of what is suported:${languagelist}`
+      );
     });
-  } else{
-    message.channel.send( `:skull_crossbones:  An error occured during translation. :fire:\n ` +
-    `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
-    "```Error: " +
-    err.toString() +
-    "```" );
+  } else {
+    message.channel.send(
+      `:skull_crossbones:  An error occured during translation. :fire:\n ` +
+        `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
+        "```Error: " +
+        err.toString() +
+        "```"
+    );
   }
   console.error(err);
 }
