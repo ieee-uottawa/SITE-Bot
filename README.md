@@ -3,7 +3,8 @@
 ![CI](https://github.com/ieee-uottawa/SITE-Bot/workflows/CI/badge.svg)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
-The **SITE-Bot** runs on the SITE discord. To contribute a command, please read on.
+The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
+[this section](#contribute-a-command).
 
 <br />
 
@@ -23,6 +24,9 @@ DISCORD_API_KEY=afs9J...
 # Optional Keys
 IBM_TRANSLATE_API_KEY=F8UpX...
 IBM_TRANSLATE_API_URL=https://api.us-south.lang...
+IBM_TONE_API_KEY=abcd...
+IBM_TONE_API_URL=https://api.us-south.tone-anal...
+
 FMP_API_KEY=0cd9....
 ```
 
@@ -32,6 +36,26 @@ Then run:
 npm install
 npm run develop
 ```
+
+<br />
+
+## Submitting a Pull request
+
+Before submitting work, please ensure the following:
+
+1. Run `npm run format` to format your code with prettier.
+1. Ensure your code is clean and efficient; no unused variables or bad abstractions!
+
+When adding new features, please use the following semantic labels for your PRs:
+
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing or correcting existing tests
+- **chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
 <br />
 
