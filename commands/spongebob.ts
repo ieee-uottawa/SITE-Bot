@@ -40,7 +40,7 @@ function spongebobify(text: string): string {
     if (random.bool()) return char + " "; // Extra spaces sometimes
     return char;
   });
-  return uPpEr.join(" ");
+  return uPpEr.join("");
 }
 
 // Command Action Function
