@@ -51,12 +51,15 @@ export const translate = async (
   // Determine what to analyze.
   const split: string[] = message.content.split(" ");
   let text = "";
-
   // check if the message is after the !tone command
   if (split.length >= 2) {
     text = split.slice(1).join(" ");
   } else {
     text = messageToAnalyze.content.trim();
+  }
+  let cutText: string[] = text.split(" ");
+  if (cutText.length >= 10) {
+    text = cutText.slice(0, 10).join(" ") + " ...";
   }
   return analyzeTone(text).then((tone) => {
     messageToAnalyze.reply(`detected tone in "${text}": ${tone}`);
