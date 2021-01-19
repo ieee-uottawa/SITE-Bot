@@ -6,6 +6,7 @@ import LanguageTranslatorV3, {
   TranslateParams,
 } from "ibm-watson/language-translator/v3";
 
+
 export const description: CommandDefinition = {
   name: "Translate",
   description:
@@ -36,13 +37,17 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 // =======================================
 
 function sendApology(message: Message, err: any) {
-  message.channel.send(
-    `:skull_crossbones:  An error occured during translation. :fire:\n ` +
-      `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
-      "```Error: " +
-      err.toString() +
-      "```"
-  );
+  if(err.code==404){
+    translateList().then((languagelist) => {
+      message.channel.send( `The language you choose is not suported, here is a list of what is suported:${languagelist}`);
+    });
+  } else{
+    message.channel.send( `:skull_crossbones:  An error occured during translation. :fire:\n ` +
+    `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
+    "```Error: " +
+    err.toString() +
+    "```" );
+  }
   console.error(err);
 }
 
@@ -108,7 +113,6 @@ export const translateList = async (): Promise<string> => {
     });
     const languagelist ='```'+ buildlist.join("\n")+'```';
     return languagelist;
-    return "hh";
   }).catch(err => {
     console.log('error:', err);
     return "";
