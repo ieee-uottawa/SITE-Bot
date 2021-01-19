@@ -14,10 +14,10 @@ export const description: CommandDefinition = {
     "!translate <language?> (translates last msg sent, even those sent by others)",
     "!translate <language> <text?>",
     "!translate list (returns list of target languages)",
-    "The language parameter can take a simple target language input (ex:Spanish)"+
-    " or it can take a source to target model example to do french to spanish the input would be fr-es."
+    "The language parameter can take a simple target language input (ex:Spanish)" +
+      " or it can take a source to target model example to do french to spanish the input would be fr-es.",
   ],
-  keys: ["translate","baguette"],
+  keys: ["translate", "baguette"],
 };
 
 /**
@@ -40,20 +40,26 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 function sendApology(message: Message, err: any) {
   if (err.code == 404) {
-    if(err.body.search("confidence")!=-1){
-      message.channel.send("Something is not working, I can figure out what language"+
-      " that message was in. If you know the source language try again using the model command\n"
-      +"```!translate <modelid?> (example en-fr for english to french) ```");
-    }else if(err.body.search("target")!=-1){
-      message.channel.send("Something is not working, i either can't figure what language"+
-      " this is or you may not have inputed or it is unsuported language.\n"+
-      "Check the supported language list with the following command.\n"+
-      "```!translate list (returns list of target languages)```");
-    }else{
-      message.channel.send("Something is not working, the model you ask for does not seem to work.\n"+
-      "You may want to check out the suportted list of languages with this command:"+
-      "`!translate list`\nMake sur to use the values inside the []. If the language code has capital"+
-      " letters in them ie fr-CA make sure to keep them. ex:'!translate en-fr-CA bonjour");
+    if (err.body.search("confidence") != -1) {
+      message.channel.send(
+        "Something is not working, I can figure out what language" +
+          " that message was in. If you know the source language try again using the model command\n" +
+          "```!translate <modelid?> (example en-fr for english to french) ```"
+      );
+    } else if (err.body.search("target") != -1) {
+      message.channel.send(
+        "Something is not working, i either can't figure what language" +
+          " this is or you may not have inputed or it is unsuported language.\n" +
+          "Check the supported language list with the following command.\n" +
+          "```!translate list (returns list of target languages)```"
+      );
+    } else {
+      message.channel.send(
+        "Something is not working, the model you ask for does not seem to work.\n" +
+          "You may want to check out the suportted list of languages with this command:" +
+          "`!translate list`\nMake sur to use the values inside the []. If the language code has capital" +
+          " letters in them ie fr-CA make sure to keep them. ex:'!translate en-fr-CA bonjour"
+      );
     }
   } else {
     message.channel.send(
@@ -91,12 +97,11 @@ export const translate = async (
   } else if (split.length === 2) {
     // Probably a language code, but if not, reply with an error.
     language = split[1];
-  } else if(key=="baguette") {
+  } else if (key == "baguette") {
     return translateIBM(text, "", "en-fr").then((translation) => {
       message.reply(`the French translation is '${translation}'`);
     });
-  }
-  else {
+  } else {
     return translateIBM(text, "", "en-fr-CA").then((translation) => {
       message.reply(`the French translation is '${translation}'`);
     });
@@ -109,13 +114,17 @@ export const translate = async (
         `I can translate your input to the following languages:\n${languagelist}`
       );
     });
-  }else if(language.search("-")!=-1 && language.length<=11){   // check if the language is a model id
+  } else if (language.search("-") != -1 && language.length <= 11) {
+    // check if the language is a model id
     return translateIBM(text, "", language).then((translation) => {
       message.reply(`the translation is '${translation}'`);
     });
   }
   // Send to the translation engine.
-  return translateIBM(text, language.toLocaleLowerCase().replace("-"," ")).then((translation) => {
+  return translateIBM(
+    text,
+    language.toLocaleLowerCase().replace("-", " ")
+  ).then((translation) => {
     message.reply(`the translation to **${language}** is '${translation}'`);
   });
 };
@@ -134,14 +143,20 @@ export const translateList = async (): Promise<string> => {
   let buildlist: string[] = []; // array will build with all supported language
   return languageTranslator.listLanguages().then((languages) => {
     languages.result.languages.forEach(function (value) {
-      if (value.supported_as_target) {  // check if the language name is two word (i.e. Traditional Chinese) and replace the space with a "-" (Traditional-Chinese)
-        if(value.language_name?.search(" ")){
+      if (value.supported_as_target) {
+        // check if the language name is two word (i.e. Traditional Chinese) and replace the space with a "-" (Traditional-Chinese)
+        if (value.language_name?.search(" ")) {
           buildlist.push(
-            `${value.country_code} - ${value.language_name?.replace(" ","-")}[${value.language}]  (${value.native_language_name})`);
-        }
-        else{// check if the language is suported, if yes then it adds it to the buildlist array
+            `${value.country_code} - ${value.language_name?.replace(
+              " ",
+              "-"
+            )}[${value.language}]  (${value.native_language_name})`
+          );
+        } else {
+          // check if the language is suported, if yes then it adds it to the buildlist array
           buildlist.push(
-            `${value.country_code} - ${value.language_name}[${value.language}]  (${value.native_language_name})`);
+            `${value.country_code} - ${value.language_name}[${value.language}]  (${value.native_language_name})`
+          );
         }
       }
     });

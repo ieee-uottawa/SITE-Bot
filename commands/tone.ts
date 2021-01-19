@@ -40,7 +40,7 @@ function sendApology(message: Message, err: any) {
 // Functions for Interacting with IBM APIs
 // =======================================
 
-export const translate = async (
+export const analyzeTone = async (
   message: Message,
   messageToAnalyze: Message
 ) => {
@@ -61,12 +61,12 @@ export const translate = async (
   if (cutText.length >= 10) {
     text = cutText.slice(0, 10).join(" ") + " ...";
   }
-  return analyzeTone(text).then((tone) => {
+  return analyzeToneIBM(text).then((tone) => {
     messageToAnalyze.reply(`detected tone in "${text}": ${tone}`);
   });
 };
 
-export const analyzeTone = async (text: string): Promise<string> => {
+export const analyzeToneIBM = async (text: string): Promise<string> => {
   console.log(`Tonal analysis on '${text}'`);
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
@@ -114,7 +114,7 @@ export const action: Action = (message: Message) => {
           if (target.author.bot) return true;
           if (target.content.startsWith("!")) return true;
           if (!target.content || target.content.trim() === "") return true;
-          translate(message, target).catch((err) => {
+          analyzeTone(message, target).catch((err) => {
             sendApology(message, err);
           });
           return false;
