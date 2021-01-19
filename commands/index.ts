@@ -60,7 +60,15 @@ export async function handleMessage<Promise>(message: Message) {
     return command.definition.keys.every((cmdKey) => {
       if (cmdKey === key) {
         console.log(`Running the ${command.definition.name} command.`);
-        command.action(message, cmdKey);
+        message.channel.startTyping();
+        try {
+          // Run the command, passing the key to run sub-commands quickly.
+          command.action(message, cmdKey);
+        } catch (err) {
+          // Last resort. Don't let your command call this!
+          message.reply("`" + err.toString() + "`");
+        }
+        message.channel.stopTyping();
         return false;
       }
       return true;
