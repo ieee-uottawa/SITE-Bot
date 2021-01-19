@@ -57,9 +57,9 @@ export const translate = async (
   } else {
     text = messageToAnalyze.content.trim();
   }
-  let cutText: string[]= text.split(" ");
-  if(cutText.length>=10){
-    text= cutText.slice(0,10).join(" ")+ "...";
+  let cutText: string[] = text.split(" ");
+  if (cutText.length >= 10) {
+    text = cutText.slice(0, 10).join(" ") + " ...";
   }
   return analyzeTone(text).then((tone) => {
     messageToAnalyze.reply(`detected tone in "${text}": ${tone}`);
