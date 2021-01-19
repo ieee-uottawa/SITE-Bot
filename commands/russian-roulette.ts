@@ -27,7 +27,7 @@ function isExtreme(content: string): boolean {
 function unbannable(exception: any, message: Message) {
   const username = message.author.tag.split("#")[0];
   message.channel.send(
-    `_(I don't have the power to handle ${username}... yet!  :smiling_imp: )_`
+    `*(I don't have the power to handle ${username}... yet!  :smiling_imp: )*`
   );
 }
 
