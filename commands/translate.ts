@@ -6,7 +6,6 @@ import LanguageTranslatorV3, {
   TranslateParams,
 } from "ibm-watson/language-translator/v3";
 
-
 export const description: CommandDefinition = {
   name: "Translate",
   description:
@@ -14,6 +13,7 @@ export const description: CommandDefinition = {
   usage: [
     "!translate <language?> (translates last msg sent, even those sent by others)",
     "!translate <language> <text?>",
+    "!translate list (returns list of target languages)",
   ],
   keys: ["translate"],
 };
@@ -35,6 +35,7 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 // Functions for Errors and Error Handling
 // =======================================
+
 
 function sendApology(message: Message, err: any) {
   if(err.code==404){
@@ -81,9 +82,11 @@ export const translate = async (
   }
 
   // Gets the possible translation languages
-  if(language=="list"){
+  if (language == "list") {
     return translateList().then((languagelist) => {
-      message.reply(`the available language to translate are '${languagelist}'`);
+      message.reply(
+        `I can translate your input to the following languages:\n${languagelist}`
+      );
     });
   }
   // Send to the translation engine.
@@ -103,20 +106,20 @@ export const translateList = async (): Promise<string> => {
     }),
     serviceUrl: apiURL,
   });
-  let buildlist:string[]=[]; // array will build with all supported language
-  return languageTranslator.listLanguages()
-  .then(languages => {
-    languages.result.languages.forEach(function (value){
-      if(value.supported_as_target){
-        buildlist.push(`${value.language_name}`); // check if the language is suported, if yes then it adds it to the buildlist array 
+  let buildlist: string[] = []; // array will build with all supported language
+  return languageTranslator.listLanguages().then((languages) => {
+    languages.result.languages.forEach(function (value) {
+      if (value.supported_as_target) {
+        // check if the language is suported, if yes then it adds it to the buildlist array
+        buildlist.push(
+          `${value.country_code} - ${value.language_name}  (${value.native_language_name})`
+        );
       }
     });
-    const languagelist ='```'+ buildlist.join("\n")+'```';
+    let i = 1;
+    const languagelist = "```" + buildlist.join("\n") + "```";
     return languagelist;
-  }).catch(err => {
-    console.log('error:', err);
-    return "";
-  }); 
+  });
 };
 
 export const translateIBM = async (
@@ -148,7 +151,7 @@ export const translateIBM = async (
     return translation;
   });
 };
-//   
+//
 // Command Action Function
 // =======================
 
