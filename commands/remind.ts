@@ -16,10 +16,10 @@ export const description: CommandDefinition = {
  */
 function parseMessage(content: string): string[] {
 
-  const roleSelect = content.match(/`(.*(\ )*.+(\ )*.*)+`/g)?.[0];
+  const roleSelect = content.match(/(`([^`]*(\ )*[^`]+(\ )*[^`]*)+`)/g)?.[0];
   if (roleSelect == null) return [];
 
-  const messageToSend = content.replace(content.match(/.*?(`.+`)(.*?) /g)!.toString(), "");
+  const messageToSend = content.replace(content.match(/(.*?`([^`]+)`)/)![0].toString(), "");
   if (messageToSend == null) return [];
   
 
@@ -75,9 +75,9 @@ export const action = (message: Message, key: string) => {
         // Send the current member a DM
         user.send(
           `**You've got mail! :mailbox_with_mail:**\n` +
-            `You are receiving this message because you are categorized under the following role: ${paramArray[0]}\n\n*` +
+            `*You are receiving this message because you are categorized under the following role: ${paramArray[0]}*\n\n` +
             paramArray[1] +
-            `*\n\nThis automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}**`
+            `\n\n*This automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}***`
         );
       });
   }
