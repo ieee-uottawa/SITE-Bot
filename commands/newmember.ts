@@ -12,12 +12,17 @@ export const description: CommandDefinition = {
 var staffList = ["Admin", "Mod", "ESS", "CSSA", "IEEE", "Server Developer", "Server Booster", "Club Representative", "Bot", "Omnipotent"]
 
 function noperms(exception: any, message: Message) {
-    message.channel.send(
+    message.reply(
       `I don't have permissions to set someone's role.`
     );
   }
 
 export const action: Action = (message: Message, key: string) => {
+
+    if (message.guild === null) {
+        message.reply("Make sure you send this command in a server.");
+        return;
+    }
 
     //Check if the caller is a Mod or Admin
     if(message.member?.roles.cache.some((role => role.name === 'Mod')) || message.member?.roles.cache.some(role => role.name === 'Admin')) {
@@ -42,7 +47,7 @@ export const action: Action = (message: Message, key: string) => {
         var addedCount = 0;
         
         // Iterate through ever member
-        message.guild?.members.cache.forEach(member => {            
+        message.guild.members.cache.forEach(member => {            
 
             //If not staff and member roles don't contain a lowercase class code, append a "New Member Role"
             if(!(member.roles.cache.some(role => staffList.includes(role.name)) 
