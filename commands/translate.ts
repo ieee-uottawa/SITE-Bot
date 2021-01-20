@@ -40,27 +40,11 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 function sendApology(message: Message, err: any) {
   if (err.code == 404) {
-    if (err.body.search("confidence") != -1) {
-      message.channel.send(
-        "Something is not working, I can figure out what language" +
-          " that message was in. If you know the source language try again using the model command\n" +
-          "```!translate <modelid?> (example en-fr for english to french) ```"
-      );
-    } else if (err.body.search("target") != -1) {
-      message.channel.send(
-        "Something is not working, i either can't figure what language" +
-          " this is or you may not have inputed or it is unsuported language.\n" +
-          "Check the supported language list with the following command.\n" +
-          "```!translate list (returns list of target languages)```"
-      );
-    } else {
-      message.channel.send(
-        "Something is not working, the model you ask for does not seem to work.\n" +
-          "You may want to check out the suportted list of languages with this command:" +
-          "`!translate list`\nMake sur to use the values inside the []. If the language code has capital" +
-          " letters in them ie fr-CA make sure to keep them. ex:'!translate en-fr-CA bonjour"
-      );
-    }
+    message.channel.send(
+        "```Error: " +
+        err.toString() +
+        "```\nType `!tranlate list' to view suported languages."        
+    );
   } else {
     message.channel.send(
       `:skull_crossbones:  An error occured during translation. :fire:\n ` +
