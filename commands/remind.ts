@@ -16,15 +16,14 @@ export const description: CommandDefinition = {
  */
 function parseMessage(content: string): string[] {
 
-  const roleSelect = content.match(/`(\w*(\ )*\w+(\ )*\w*)+`/g)[0];
+  const roleSelect = content.match(/`(\w*(\ )*\w+(\ )*\w*)+`/g)?.[0];
   if (roleSelect == null) return [];
 
-  const messageToSend = content.replace(content.match(/.*?(`.+`)(.*?) /g), "");
+  const messageToSend = content.replace(content.match(/.*?(`.+`)(.*?) /g)!.toString(), "");
   if (messageToSend == null) return [];
   
 
   const paramArray = [roleSelect, messageToSend]
-  console.log(paramArray)
   if (paramArray === undefined) return []; // Quit if invalid format was passed
   if (paramArray[0].match(/`/gi)?.length !== 2) return []; // Quit if missing code syntax
   paramArray[0] = paramArray[0].slice(1, -1); // Slice off the code syntax (no longer needed)
@@ -45,7 +44,6 @@ export const action = (message: Message, key: string) => {
   }
 
   const paramArray = parseMessage(message.content); // Parse the target role and message to send
-  console.log(paramArray);
   if (paramArray.length === 0) {
     message.reply(
       "I couldn't understand your request... For example you can do !remind `Mod` Hi all Mods!. Please make sure to wrap the role in `code syntax`!"
