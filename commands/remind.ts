@@ -2,9 +2,8 @@ import { Message, UserResolvable } from "discord.js";
 import { Command, CommandDefinition, Action } from ".";
 
 export const description: CommandDefinition = {
-  name: "Reminder Bot",
-  description:
-    "Reminds a subset of users with a specific message. Only usable by Admins & Mods.",
+  name: "Reminder (Admin)",
+  description: "Reminds a subset of users with a specific message.",
   usage: ["!remind `<role>` <message>"],
   keys: ["remind"],
 };

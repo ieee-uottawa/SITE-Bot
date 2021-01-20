@@ -9,7 +9,7 @@ import {
 import { Command, CommandDefinition, Action } from ".";
 
 export const description: CommandDefinition = {
-  name: "Update New Member Role",
+  name: "Update New Member Role (Admin)",
   description:
     "Scans through the server's users and updates the New Member role. Adds the role to anybody with no class role, and removes it from people that have added a class.",
   usage: ["!newmember"],

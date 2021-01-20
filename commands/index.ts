@@ -13,7 +13,7 @@ import Spongebob from "./spongebob";
 import Tone from "./tone";
 import Remind from "./remind";
 
-import NewMember from './newmember';
+import NewMember from "./newmember";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
@@ -27,9 +27,9 @@ export const commands: Command[] = [
   Spongebob,
   Roulette,
   Remind,
+  NewMember,
   PingPong,
   Contribute,
-  NewMember,
 ];
 
 export type CommandDefinition = {
