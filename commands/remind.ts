@@ -16,7 +16,7 @@ export const description: CommandDefinition = {
  */
 function parseMessage(content: string): string[] {
 
-  const roleSelect = content.match(/`(\w*(\ )*\w+(\ )*\w*)+`/g)?.[0];
+  const roleSelect = content.match(/`(.*(\ )*.+(\ )*.*)+`/g)?.[0];
   if (roleSelect == null) return [];
 
   const messageToSend = content.replace(content.match(/.*?(`.+`)(.*?) /g)!.toString(), "");
