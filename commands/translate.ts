@@ -14,8 +14,10 @@ export const description: CommandDefinition = {
     "!translate <language?> (translates last msg sent, even those sent by others)",
     "!translate <language> <text?>",
     "!translate list (returns list of target languages)",
+    "The language parameter can take a simple target language input (ex:Spanish)" +
+      " or it can take a source to target model example to do french to spanish the input would be fr-es.",
   ],
-  keys: ["translate"],
+  keys: ["translate", "baguette"],
 };
 
 /**
@@ -37,13 +39,21 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 // =======================================
 
 function sendApology(message: Message, err: any) {
-  message.channel.send(
-    `:skull_crossbones:  An error occured during translation. :fire:\n ` +
-      `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
-      "```Error: " +
-      err.toString() +
-      "```"
-  );
+  if (err.code == 404) {
+    message.channel.send(
+        "```Error: " +
+        err.toString() +
+        "```\nType `!tranlate list' to view suported languages."        
+    );
+  } else {
+    message.channel.send(
+      `:skull_crossbones:  An error occured during translation. :fire:\n ` +
+        `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
+        "```Error: " +
+        err.toString() +
+        "```"
+    );
+  }
   console.error(err);
 }
 
@@ -52,7 +62,8 @@ function sendApology(message: Message, err: any) {
 
 export const translate = async (
   message: Message,
-  messageToTranslate: Message
+  messageToTranslate: Message,
+  key: string
 ) => {
   // Ensure the key/url are present, and return if not:
   if (!(apiKey && apiURL))
@@ -60,18 +71,22 @@ export const translate = async (
 
   // Determine what to translate.
   // If it's just the bang-translate, proceed.
-  const split: string[] = message.content.toLowerCase().split(" ");
+  const split: string[] = message.content.split(" ");
   let text = messageToTranslate.content.trim();
   let language: string = ""; // Translate to French by default.
   if (split.length >= 3) {
     // First element might be a language code.
     text = split.slice(2).join(" ");
-    language = split[1].toLowerCase();
+    language = split[1];
   } else if (split.length === 2) {
     // Probably a language code, but if not, reply with an error.
-    language = split[1].toLowerCase();
-  } else {
+    language = split[1];
+  } else if (key == "baguette") {
     return translateIBM(text, "", "en-fr").then((translation) => {
+      message.reply(`the French translation is '${translation}'`);
+    });
+  } else {
+    return translateIBM(text, "", "en-fr-CA").then((translation) => {
       message.reply(`the French translation is '${translation}'`);
     });
   }
@@ -83,9 +98,17 @@ export const translate = async (
         `I can translate your input to the following languages:\n${languagelist}`
       );
     });
+  } else if (language.search("-") != -1 && language.length <= 11) {
+    // check if the language is a model id
+    return translateIBM(text, "", language).then((translation) => {
+      message.reply(`the translation is '${translation}'`);
+    });
   }
   // Send to the translation engine.
-  return translateIBM(text, language).then((translation) => {
+  return translateIBM(
+    text,
+    language.toLocaleLowerCase().replace("-", " ")
+  ).then((translation) => {
     message.reply(`the translation to **${language}** is '${translation}'`);
   });
 };
@@ -105,10 +128,20 @@ export const translateList = async (): Promise<string> => {
   return languageTranslator.listLanguages().then((languages) => {
     languages.result.languages.forEach(function (value) {
       if (value.supported_as_target) {
-        // check if the language is suported, if yes then it adds it to the buildlist array
-        buildlist.push(
-          `${value.country_code} - ${value.language_name}  (${value.native_language_name})`
-        );
+        // check if the language name is two word (i.e. Traditional Chinese) and replace the space with a "-" (Traditional-Chinese)
+        if (value.language_name?.search(" ")) {
+          buildlist.push(
+            `${value.country_code} - ${value.language_name?.replace(
+              " ",
+              "-"
+            )}[${value.language}]  (${value.native_language_name})`
+          );
+        } else {
+          // check if the language is suported, if yes then it adds it to the buildlist array
+          buildlist.push(
+            `${value.country_code} - ${value.language_name}[${value.language}]  (${value.native_language_name})`
+          );
+        }
       }
     });
     let i = 1;
@@ -150,7 +183,7 @@ export const translateIBM = async (
 // Command Action Function
 // =======================
 
-export const action: Action = (message: Message) => {
+export const action: Action = (message: Message, key: string) => {
   message.channel.messages
     .fetch()
     .then((messageList) => {
@@ -161,7 +194,7 @@ export const action: Action = (message: Message) => {
           if (target.author.bot) return true;
           if (target.content.startsWith("!")) return true;
           if (!target.content || target.content.trim() === "") return true;
-          translate(message, target).catch((err) => {
+          translate(message, target, key).catch((err) => {
             sendApology(message, err);
           });
           return false;
