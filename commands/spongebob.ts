@@ -52,7 +52,12 @@ export const memeMaker = async (message: Message, spongebobifyText: string) => {
   //create the default canvas
   const canvas = Canvas.createCanvas(width, width);
   const ctx = canvas.getContext("2d");
-  const split = spongebobifyText.split("\n").join(' ').split('\r').join(' ').split(" ");
+  const split = spongebobifyText
+    .split("\n")
+    .join(" ")
+    .split("\r")
+    .join(" ")
+    .split(" ");
   //creates every line and making sure they fit in our width.
   ctx.font = fontsize + "px Calibri";
   for (let index = 0; index < split.length; index++) {
@@ -119,7 +124,7 @@ export const action: Action = (message: Message) => {
           if (target.content.startsWith("!")) return true;
           if (!target.content || target.content.trim() === "") return true;
           // Spongebobify the message and return.
-          memeMaker(target, target.content);//prints as meme
+          memeMaker(target, target.content); //prints as meme
           //target.channel.send(spongebobify(target.content));//prints as text
           return false;
         });
