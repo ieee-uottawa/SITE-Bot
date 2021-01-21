@@ -1,7 +1,6 @@
-import { DiscordAPIError, Message } from "discord.js";
+import Discord, { Message } from "discord.js";
 import { Action, Command, CommandDefinition, random } from ".";
 import Canvas from "canvas";
-import Discord from "discord.js";
 
 export const description: CommandDefinition = {
   name: "Spongebobify",
@@ -120,8 +119,8 @@ export const action: Action = (message: Message) => {
           if (target.content.startsWith("!")) return true;
           if (!target.content || target.content.trim() === "") return true;
           // Spongebobify the message and return.
-          memeMaker(target, target.content);
-          //target.channel.send(spongebobify(target.content));
+          memeMaker(target, target.content);//prints as meme
+          //target.channel.send(spongebobify(target.content));//prints as text
           return false;
         });
         if (res === true) {
