@@ -52,7 +52,7 @@ export const memeMaker = async (message: Message, spongebobifyText: string) => {
   //create the default canvas
   const canvas = Canvas.createCanvas(width, width);
   const ctx = canvas.getContext("2d");
-  const split = spongebobifyText.replace("\n", " ").split(" ");
+  const split = spongebobifyText.split("\n").join(' ').split('\r').join(' ').split(" ");
   //creates every line and making sure they fit in our width.
   ctx.font = fontsize + "px Calibri";
   for (let index = 0; index < split.length; index++) {
