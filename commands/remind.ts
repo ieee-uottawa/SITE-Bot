@@ -15,10 +15,15 @@ export const description: CommandDefinition = {
  * @return An array of two elements: the target role, and the message to send
  */
 function parseMessage(content: string): string[] {
-  const paramArray = content
-    .replace("!remind ", "")
-    .match(/^(\S+)\s(.*)/)
-    ?.slice(1);
+
+  const roleSelect = content.match(/(`([^`]*(\ )*[^`]+(\ )*[^`]*)+`)/g)?.[0];
+  if (roleSelect == null) return [];
+
+  const messageToSend = content.replace(content.match(/(.*?`([^`]+)`)/)![0].toString(), "");
+  if (messageToSend == null) return [];
+  
+
+  const paramArray = [roleSelect, messageToSend]
   if (paramArray === undefined) return []; // Quit if invalid format was passed
   if (paramArray[0].match(/`/gi)?.length !== 2) return []; // Quit if missing code syntax
   paramArray[0] = paramArray[0].slice(1, -1); // Slice off the code syntax (no longer needed)
@@ -70,9 +75,9 @@ export const action = (message: Message, key: string) => {
         // Send the current member a DM
         user.send(
           `**You've got mail! :mailbox_with_mail:**\n` +
-            `You are receiving this message because you are categorized under the following role: ${paramArray[0]}\n\n*` +
+            `*You are receiving this message because you are categorized under the following role: ${paramArray[0]}*\n\n` +
             paramArray[1] +
-            `*\n\nThis automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}**`
+            `\n\n*This automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}***`
         );
       });
   }
