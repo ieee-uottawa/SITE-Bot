@@ -44,51 +44,65 @@ function spongebobify(text: string): string {
   });
   return uPpEr.join("");
 }
-export const memeMaker = async (
-  message: Message,
-  spongebobifyText: string
-) => {
-  const fontsize=50//number of px for the font.
-  const width=750;
-  let textLines: string[]=[];
-  let tempArray: string[]=[];
-  let lastString: string="";
+export const memeMaker = async (message: Message, spongebobifyText: string) => {
+  const fontsize = 50; //number of px for the font.
+  const width = 750;
+  let textLines: string[] = [];
+  let tempArray: string[] = [];
+  let lastString: string = "";
   //create the default canvas
-  const canvas = Canvas.createCanvas(width,width);
-  const ctx = canvas.getContext('2d');
-  const split=spongebobifyText.replace("\n"," ").split(" ");
+  const canvas = Canvas.createCanvas(width, width);
+  const ctx = canvas.getContext("2d");
+  const split = spongebobifyText.replace("\n", " ").split(" ");
   //creates every line and making sure they fit in our width.
-  ctx.font=fontsize+'px Calibri';
+  ctx.font = fontsize + "px Calibri";
   for (let index = 0; index < split.length; index++) {
     tempArray.push(split[index]);
-    let tempString= spongebobify(tempArray.join(" "));
-    if(ctx.measureText(tempString).width>width*(1-(fontsize*.4)/width)){
+    let tempString = spongebobify(tempArray.join(" "));
+    if (
+      ctx.measureText(tempString).width >
+      width * (1 - (fontsize * 0.4) / width)
+    ) {
       textLines.push(lastString);
-      lastString="";
-      tempArray=[];
-    }else{
-      lastString=tempString;
+      lastString = "";
+      tempArray = [];
+    } else {
+      lastString = tempString;
     }
   }
-  if(lastString.replace(" ","").length>0){
-  textLines.push(lastString);
+  if (lastString.replace(" ", "").length > 0) {
+    textLines.push(lastString);
   }
-  const background = await Canvas.loadImage('./imagerepo/spongebob.jpg');//load spongebob image
-  const picRatio=background.naturalHeight/background.naturalWidth;
-  canvas.height=width*picRatio+fontsize*1.2*textLines.length+fontsize*.4;// resize canvas
+  const background = await Canvas.loadImage("./imagerepo/spongebob.jpg"); //load spongebob image
+  const picRatio = background.naturalHeight / background.naturalWidth;
+  canvas.height =
+    width * picRatio + fontsize * 1.2 * textLines.length + fontsize * 0.4; // resize canvas
   //create white box
-  ctx.fillStyle='#ffffff';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   //add spongebob image
-  ctx.drawImage(background,0,(canvas.height-canvas.width*picRatio), canvas.width, canvas.width*picRatio);
+  ctx.drawImage(
+    background,
+    0,
+    canvas.height - canvas.width * picRatio,
+    canvas.width,
+    canvas.width * picRatio
+  );
   //create text
-  ctx.fillStyle='#000000';
-  ctx.font=fontsize+'px Calibri';
+  ctx.fillStyle = "#000000";
+  ctx.font = fontsize + "px Calibri";
   for (let index = 0; index < textLines.length; index++) {
-    ctx.fillText(textLines[index],fontsize*.2,fontsize*1.2*(index+1));
+    ctx.fillText(
+      textLines[index],
+      fontsize * 0.2,
+      fontsize * 1.2 * (index + 1)
+    );
   }
   //post meme
-  const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'spongebobify_meme.png');
+  const attachment = new Discord.MessageAttachment(
+    canvas.toBuffer(),
+    "spongebobify_meme.png"
+  );
   message.channel.send(attachment);
 };
 // Command Action Function

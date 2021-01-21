@@ -41,9 +41,9 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 function sendApology(message: Message, err: any) {
   if (err.code == 404) {
     message.channel.send(
-        "```Error: " +
+      "```Error: " +
         err.toString() +
-        "```\nType `!tranlate list' to view suported languages."        
+        "```\nType `!tranlate list' to view suported languages."
     );
   } else {
     message.channel.send(
