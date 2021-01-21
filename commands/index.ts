@@ -84,7 +84,7 @@ export async function handleMessage<Promise>(message: Message) {
   });
 }
 
-export async function handleImages<Promise>(message: Message) {
+export async function handleAttachment<Promise>(message: Message) {
   //test if the attchment is an image
   if (message.channel.id==process.env.DISCORD_PET_CHANEL){
     return Pet.action(message, "");

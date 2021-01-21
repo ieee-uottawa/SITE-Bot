@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import dotenv from "dotenv";
 import express from "express";
-import { handleMessage, handleImages } from "./commands";
+import { handleMessage, handleAttachment} from "./commands";
 import { Message } from "discord.js";
 
 /**
@@ -19,11 +19,9 @@ client.once("ready", () => {
 });
 
 client.on("message", (message: Message) => {
-  //console.log(message.attachments.entries());
-  //message.react('😍');
   // Don't respond to other bots.
   if (message.author.bot) return;
-  if (message.attachments.size>=1) {handleImages(message);
+  if (message.attachments.size>=1) {handleAttachment(message);
   }
   // Return an empty string (no key) if message does not start with a bang.
   if (!message.content.startsWith("!")) return;
