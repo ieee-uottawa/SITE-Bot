@@ -15,15 +15,16 @@ export const description: CommandDefinition = {
  * @return An array of two elements: the target role, and the message to send
  */
 function parseMessage(content: string): string[] {
-
   const roleSelect = content.match(/(`([^`]*(\ )*[^`]+(\ )*[^`]*)+`)/g)?.[0];
   if (roleSelect == null) return [];
 
-  const messageToSend = content.replace(content.match(/(.*?`([^`]+)`)/)![0].toString(), "");
+  const messageToSend = content.replace(
+    content.match(/(.*?`([^`]+)`)/)![0].toString(),
+    ""
+  );
   if (messageToSend == null) return [];
-  
 
-  const paramArray = [roleSelect, messageToSend]
+  const paramArray = [roleSelect, messageToSend];
   if (paramArray === undefined) return []; // Quit if invalid format was passed
   if (paramArray[0].match(/`/gi)?.length !== 2) return []; // Quit if missing code syntax
   paramArray[0] = paramArray[0].slice(1, -1); // Slice off the code syntax (no longer needed)
