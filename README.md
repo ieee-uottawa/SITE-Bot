@@ -6,6 +6,8 @@
 The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 [this section](#contribute-a-command).
 
+<br />
+
 #### Table of Contents
 
 1. [Development](#development)
@@ -19,7 +21,9 @@ The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 ## Development
 
 We're always looking for more commands! Send us a pull request with your
-contribution and we'll do our best to review and merge it.
+contribution and we'll do our best to review and merge it. 
+See the [Contribute a Command](#contribute-a-command) section for
+instructions on how to use the pluggable command architecture.
 
 To test your additions, [set up a bot
 app](https://discordjs.guide/preparations/setting-up-a-bot-application.html) on
