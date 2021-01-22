@@ -8,10 +8,22 @@ The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 
 <br />
 
+#### Table of Contents
+
+1. [Development](#development)
+1. [Submitting a Pull Request](#submitting-a-pull-request)
+1. [Philosophy](#philosophy)
+1. [Contribute a Command](#contribute-a-command)
+1. [More Complex Example](#more-complex-example)
+
+<br />
+
 ## Development
 
 We're always looking for more commands! Send us a pull request with your
-contribution and we'll do our best to review and merge it.
+contribution and we'll do our best to review and merge it. 
+See the [Contribute a Command](#contribute-a-command) section for
+instructions on how to use the pluggable command architecture.
 
 To test your additions, [set up a bot
 app](https://discordjs.guide/preparations/setting-up-a-bot-application.html) on
@@ -56,6 +68,20 @@ When adding new features, please use the following semantic labels for your PRs:
 - **perf**: A code change that improves performance
 - **test**: Adding missing or correcting existing tests
 - **chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
+
+<br />
+
+## Philosophy
+
+This is a purely functional bot; it provides tools for humans to use.
+
+While contributions with additions that react and participate in conversations are cool, I have intentionally steered away from allowing pull requests adding this behavior for two reasons:
+
+1. Though it'd provide a fun surprise once in a while, I don't want bots behaving as independent entities on the server. The conversation and discussions should be driven by people, and I feel it would cheapen the experience to have bots monitor and react to messages. In the interest of maximizing human agency (providing tools instead of analyzing and suggesting,) I don't want to include commands that analyze every message.
+
+2. Privacy; I know there's no expectation for messages on the server being kept private, but running every message through a potentially large list of third-party API endpoints and libraries (depending on what contributors add in the future) is not something I'd like to subject people to.
+
+Bots aren't people and should't react like them; I don't want to allow commands to be written that process data via third parties, and that means restricting all non-functional commands.
 
 <br />
 
