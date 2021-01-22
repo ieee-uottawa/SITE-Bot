@@ -70,7 +70,8 @@ export async function handleMessage(message: Message): Promise<void> {
         } catch (err) {
           // Last resort. Don't let your command call this!
           message.reply(
-            "the command you ran threw an unhandled error: `" +
+            `the !${cmdKey} command you ran threw an unhandled error:` +
+              "`" +
               err.toString() +
               "`"
           );
