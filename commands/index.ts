@@ -1,5 +1,6 @@
 import { MersenneTwister19937, Random } from "random-js";
 import { Message } from "discord.js";
+import dotenv from "dotenv";
 import Help from "./help";
 import PingPong from "./pingpong";
 import Dice from "./dice";
@@ -12,6 +13,7 @@ import Stonk from "./stonk";
 import Spongebob from "./spongebob";
 import Tone from "./tone";
 import Remind from "./remind";
+import Pet from "./pet";
 
 import NewMember from "./newmember";
 
@@ -30,6 +32,7 @@ export const commands: Command[] = [
   NewMember,
   PingPong,
   Contribute,
+  Pet,
 ];
 
 export type CommandDefinition = {
@@ -83,6 +86,12 @@ export async function handleMessage(message: Message): Promise<void> {
       return true;
     });
   });
+}
+export async function handleAttachment<Promise>(message: Message) {
+  //test if the attchment is an image
+  if (message.channel.id==process.env.DISCORD_PET_CHANEL){
+    return Pet.action(message, "");
+  }
 }
 
 // Init IFFE
