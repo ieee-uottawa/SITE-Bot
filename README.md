@@ -6,6 +6,14 @@
 The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 [this section](#contribute-a-command).
 
+#### Table of Contents
+
+1. [Development](#development)
+1. [Submitting a Pull Request](#submitting-a-pull-request)
+1. [Philosophy](#philosophy)
+1. [Contribute a Command](#contribute-a-command)
+1. [More Complex Example](#more-complex-example)
+
 <br />
 
 ## Development
