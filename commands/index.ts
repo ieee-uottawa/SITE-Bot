@@ -54,7 +54,6 @@ export function extractKey(content: string): string {
 }
 
 export async function handleMessage(message: Message): Promise<void> {
-  console.log(`Handling message ${message.content}`);
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
 
@@ -70,7 +69,7 @@ export async function handleMessage(message: Message): Promise<void> {
         } catch (err) {
           // Last resort. Don't let your command call this!
           message.reply(
-            `the !${cmdKey} command you ran threw an unhandled error:` +
+            `the !${cmdKey} command you ran threw an unhandled error: ` +
               "`" +
               err.toString() +
               "`"

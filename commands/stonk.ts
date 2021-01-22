@@ -37,7 +37,6 @@ export const action: Action = (message: Message, key) => {
       return response.json();
     })
     .then((res: any) => {
-      console.log(JSON.stringify(res));
       if (res === undefined || res.length === 0)
         // Result of an invalid symbol provided
         message.channel.send(

@@ -67,7 +67,6 @@ export const analyzeTone = async (
 };
 
 export const analyzeToneIBM = async (text: string): Promise<string> => {
-  console.log(`Tonal analysis on '${text}'`);
   // Performance of this method could potentially be improved by instantiating
   // the authentication and language translation objects outside of the
   // function. Problem is, I'm not sure how fast they expire.
