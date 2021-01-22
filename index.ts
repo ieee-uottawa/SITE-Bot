@@ -18,7 +18,7 @@ client.once("ready", () => {
   console.log("Logged in to Discord! The bot should be available now.");
 });
 
-client.on("message", (message: Message) => {
+client.on("message", async (message: Message) => {
   // Don't respond to other bots.
   if (message.author.bot) return;
   // Return an empty string (no key) if message does not start with a bang.

@@ -39,6 +39,7 @@ function parseDieSize(content: string): { num: number; volume: number } {
 // ========================
 
 export const action: Action = (message, key) => {
+  throw new Error("Fuck you.");
   if (key === "roll") {
     // Extract die size from message.
     const dieData = parseDieSize(message.content);

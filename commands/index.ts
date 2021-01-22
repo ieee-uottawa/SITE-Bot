@@ -53,7 +53,7 @@ export function extractKey(content: string): string {
   return key.toLowerCase();
 }
 
-export async function handleMessage<Promise>(message: Message) {
+export async function handleMessage(message: Message): Promise<void> {
   console.log(`Handling message ${message.content}`);
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
@@ -69,7 +69,11 @@ export async function handleMessage<Promise>(message: Message) {
           command.action(message, cmdKey);
         } catch (err) {
           // Last resort. Don't let your command call this!
-          message.reply("`" + err.toString() + "`");
+          message.reply(
+            "the command you ran threw an unhandled error: `" +
+              err.toString() +
+              "`"
+          );
         }
         message.channel.stopTyping();
         return false;
