@@ -73,6 +73,10 @@ When adding new features, please use the following semantic labels for your PRs:
 
 ## Philosophy
 
+This section outlines some philosophical/moral things to keep in mind before making a PR.
+
+### Purely Functional Commands
+
 This is a purely functional bot; it provides tools for humans to use.
 
 While contributions with additions that react and participate in conversations are cool, I have intentionally steered away from allowing pull requests adding this behavior for two reasons:
@@ -82,6 +86,16 @@ While contributions with additions that react and participate in conversations a
 2. Privacy; I know there's no expectation for messages on the server being kept private, but running every message through a potentially large list of third-party API endpoints and libraries (depending on what contributors add in the future) is not something I'd like to subject people to.
 
 Bots aren't people and should't react like them; I don't want to allow commands to be written that process data via third parties, and that means restricting all non-functional commands.
+
+### Less Is More
+
+Mounds of spaghetti code, or very dense code, present a very high mental load and result in 
+difficult (if not impossible) to maintain projects. When writing commands to submit to this
+project, ask yourself these questions as you are programming:
+
+- Am I using the *simplest possible solution*? Can I find a lazy way to do this?
+- Can I make my work clearer (variable names, comments, breaking up long methods.)
+- Is there a *more performant solution I am missing*? (filtering a large list vs checking a builtin variable for the same data)
 
 <br />
 
