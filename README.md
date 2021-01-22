@@ -59,6 +59,20 @@ When adding new features, please use the following semantic labels for your PRs:
 
 <br />
 
+## Philosophy
+
+This is a purely functional bot; it provides tools for humans to use.
+
+While contributions with additions that react and participate in conversations are cool, I have intentionally steered away from allowing pull requests adding this behavior for two reasons:
+
+1. Though it'd provide a fun surprise once in a while, I don't want bots behaving as independent entities on the server. The conversation and discussions should be driven by people, and I feel it would cheapen the experience to have bots monitor and react to messages. In the interest of maximizing human agency (providing tools instead of analyzing and suggesting,) I don't want to include commands that analyze every message.
+
+2. Privacy; I know there's no expectation for messages on the server being kept private, but running every message through a potentially large list of third-party API endpoints and libraries (depending on what contributors add in the future) is not something I'd like to subject people to.
+
+Bots aren't people and should't react like them; I don't want to allow commands to be written that process data via third parties, and that means restricting all non-functional commands.
+
+<br />
+
 ## Contribute A Command
 
 Here are the limitations and requirements for site-bot commands:
