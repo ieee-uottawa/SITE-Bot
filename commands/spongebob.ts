@@ -32,7 +32,7 @@ function spongebobify(text: string): string {
   const split = text.toLowerCase().split("");
   const noSpecials = split.filter((char) => {
     // Don't return discord styling tokens.
-    if (char === "*" || char === "_" || char === "^") return false;
+    if (char === "*" || char === "_" || char === "^" || char === "~" ) return false;
     return true;
   });
   const uPpEr = noSpecials.map((char) => {
@@ -70,6 +70,7 @@ export const memeMaker = async (message: Message, spongebobifyText: string) => {
       textLines.push(lastString);
       lastString = "";
       tempArray = [];
+      tempArray.push(split[index]);
     } else {
       lastString = tempString;
     }
