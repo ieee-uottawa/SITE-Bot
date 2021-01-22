@@ -68,15 +68,17 @@ export async function handleMessage(message: Message): Promise<void> {
           command.action(message, cmdKey);
         } catch (err) {
           // Last resort. Don't let your command call this!
+          console.error(err);
           message.reply(
             `the !${cmdKey} command you ran threw an unhandled error: ` +
               "`" +
               err.toString() +
               "`"
           );
+        } finally {
+          message.channel.stopTyping();
+          return false;
         }
-        message.channel.stopTyping();
-        return false;
       }
       return true;
     });
