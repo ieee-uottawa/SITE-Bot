@@ -47,10 +47,11 @@ export const action: Action = (message: Message) => {
 
   if (splitContent.length == 1) {
     // If just !public is called, send the manual to the user.
-    message.author.send(help());
-    message.reply(
-      "I've sent you the full user manual! Type `!help public` to print the full manual to this channel."
-    );
+    // message.author.send(help());
+    message.channel.send(help()); // TODO: Revert when DMs are cool again.
+    // message.reply(
+    //   "I've sent you the full user manual! Type `!help public` to print the full manual to this channel."
+    // );
     return;
   } else if (splitContent.length == 2) {
     // If the keyword is public, send the manual and return.
