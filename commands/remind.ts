@@ -45,32 +45,40 @@ function parseMessage(content: string): string[] {
  * @param name Name to keep track of requests in the logs.
  * @param action Function to attempt to send.
  */
-export const retryAction = (
+export const retryAction = async (
   delay: number,
   retries: number,
   name: string,
   action: () => Promise<any>
-) => {
+): Promise<boolean | void> => {
   // Throw an error if we're out of retries.
   if (retries > 0) {
     console.log("Async-Retry action: " + name);
     // Otherwise, call the action and repeat it if it fails.
-    action()
-      .then((res) => {
+    return action()
+      .then(() => {
         console.log("Successfully completed Async-Retry action: " + name);
+        return true;
       })
       .catch((err) => {
+        // If an error is caught, wait an undetermined amount of time longer.
         setTimeout(() => {
           console.log(
             `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: [${Object.keys(
               err
             ).join(", ")}] -> ${err.toString()}`
           );
-          retryAction(delay * random.integer(1, 10), retries - 1, name, action);
+          return retryAction(
+            delay * random.integer(1, 10),
+            retries - 1,
+            name,
+            action
+          );
         }, delay);
       });
   } else {
     console.error("Exceeded the number of action retries for action: " + name);
+    return false;
   }
 };
 
@@ -145,19 +153,32 @@ export const action = (message: Message, key: string) => {
 
   // Load all the messages to-be-sent into the event queue
   let i = 0;
-  memberList.forEach(async (gm, key) => {
-    retryAction(
-      1000,
-      3,
-      `Sending message #${++i} to ${gm.user.username}`,
-      () => {
-        return gm.send(
-          `**You've got mail! :mailbox_with_mail:**\n` +
-            `*You are receiving this message because you are categorized under the following role: ${roleName}*\n\n` +
-            cleanedMessage +
-            `\n\n*This automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}***`
-        );
-      }
+  Promise.all(
+    memberList.map((gm) => {
+      return retryAction(
+        1000,
+        3,
+        `Sending message #${++i} to ${gm.user.username}`,
+        async () => {
+          return gm.send(
+            `**You've got mail! :mailbox_with_mail:**\n` +
+              `*You are receiving this message because you are categorized under the following role: ${roleName}*\n\n` +
+              cleanedMessage +
+              `\n\n*This automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}***`
+          );
+        }
+      );
+    })
+  ).then((promises) => {
+    console.log(
+      `All messages sent, ${
+        promises.filter((x) => x).length
+      } sent successfully.`
+    );
+    message.reply(
+      `All messages sent, ${
+        promises.filter((x) => x).length
+      } sent successfully.`
     );
   });
 };
