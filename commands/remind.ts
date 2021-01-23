@@ -54,14 +54,14 @@ export const retryAction = (
       })
       .catch((err) => {
         console.log(
-          `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: ${err.toString()}`
+          `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: [${Object.keys(
+            err
+          ).join(", ")}] -> ${err.toString()}`
         );
         retryAction(delay, retries - 1, name, action);
       });
   } else {
-    throw new Error(
-      "Exceeded the number of action retries for action: " + name
-    );
+    console.error("Exceeded the number of action retries for action: " + name);
   }
 };
 
