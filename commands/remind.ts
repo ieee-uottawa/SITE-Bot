@@ -31,21 +31,79 @@ function parseMessage(content: string): string[] {
   return paramArray;
 }
 
+/**
+ * Repeats an action a set number of times in an attempt to complete it.
+ * @param delay Initial delay.
+ * @param retries Number of times to retry the command.
+ * @param name Name to keep track of requests in the logs.
+ * @param action Function to attempt to send.
+ */
+export const retryAction = (
+  delay: number,
+  retries: number,
+  name: string,
+  action: () => Promise<any>
+) => {
+  // Throw an error if we're out of retries.
+  if (retries > 0) {
+    console.log("Async-Retry action: " + name);
+    // Otherwise, call the action and repeat it if it fails.
+    action()
+      .then((res) => {
+        console.log("Successfully completed Async-Retry action: " + name);
+      })
+      .catch((err) => {
+        console.log(
+          `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: ${err.toString()}`
+        );
+        retryAction(delay, retries - 1, name, action);
+      });
+  } else {
+    throw new Error(
+      "Exceeded the number of action retries for action: " + name
+    );
+  }
+};
+
 export const action = (message: Message, key: string) => {
+  // Cannot be called outside of a server
   if (!message.guild) {
-    // Cannot be called outside of a server
+    console.log(
+      "Rejected reminder because the message was not called in a guild."
+    );
     message.author.send("Call me in a server!");
     return;
   }
 
-  const highestRole = message.member?.roles.highest.name; // Request must be from Admin or Mod
-  if (!(highestRole === "Admin" || highestRole === "Mod")) {
+  // Ensure the content length is short enough to send.
+  if (message.content.length > 1602) {
+    console.log("Rejected reminder because the message was too long.");
+    message.reply(
+      "I can't send something this long, try to keep your message under 1600 characters."
+    );
+  }
+
+  // Request must be from Admin or Mod
+  const highestRole = message.member?.roles.highest.name;
+  if (
+    !(
+      (
+        highestRole === "Admin" ||
+        highestRole === "Mod" ||
+        message.author.id === "749656589887340607"
+      ) // id belongs to @RyanFleck ;)  TODO: Remove hardcoded id after testing.
+    )
+  ) {
+    console.log("Rejected reminder because the user was not a moderator.");
     message.reply("Sorry! I only accept !remind requests from Admins or Mods");
     return;
   }
 
   const paramArray = parseMessage(message.content); // Parse the target role and message to send
   if (paramArray.length === 0) {
+    console.log(
+      "Rejected reminder because the message parser failed to recognize a valid command."
+    );
     message.reply(
       "I couldn't understand your request... For example you can do !remind `Mod` Hi all Mods!. Please make sure to wrap the role in `code syntax`!"
     );
@@ -53,10 +111,13 @@ export const action = (message: Message, key: string) => {
   }
 
   // Fetch the role ID of the role name provided
-  const roleId = message.guild.roles.cache.find((r) => r.name === paramArray[0])
-    ?.id;
+  const roleName = paramArray[0];
+  const cleanedMessage = paramArray[1];
+  const roleId = message.guild.roles.cache.find((r) => r.name === roleName)?.id;
+
+  // Quit if role is invalid
   if (roleId === undefined) {
-    // Quit if role is invalid
+    console.log("Rejected reminder because the given role is invalid.");
     message.reply(
       "I don't recognize that role, perhaps there is a typo in it, or no user is categorized by it."
     );
@@ -67,22 +128,29 @@ export const action = (message: Message, key: string) => {
   const memberList = message.guild.members.cache.filter(
     (m) => m.roles.cache.has(roleId) && !m.user.bot
   );
-  const membersJSON: any = memberList.toJSON();
-  for (const key in membersJSON) {
-    // Iterate through each member JSON
-    message.guild.members
-      .fetch(membersJSON[key].userID) // Fetch the member based on ID
-      .then((user: any) => {
-        // Send the current member a DM
-        user.send(
+
+  // Communicate that the message is being sent.
+  message.reply(
+    `attempting to send message to ${memberList.size} users with the @${roleName} role`
+  );
+
+  // Load all the messages to-be-sent into the event queue
+  let i = 0;
+  memberList.forEach(async (gm, key) => {
+    retryAction(
+      1000,
+      3,
+      `Sending message #${++i} to ${gm.user.username}`,
+      () => {
+        return gm.send(
           `**You've got mail! :mailbox_with_mail:**\n` +
-            `*You are receiving this message because you are categorized under the following role: ${paramArray[0]}*\n\n` +
-            paramArray[1] +
+            `*You are receiving this message because you are categorized under the following role: ${roleName}*\n\n` +
+            cleanedMessage +
             `\n\n*This automated message was sent to you on behalf of **${message.author.username}** from the **${message.guild?.name}***`
         );
-      });
-  }
-  message.reply("message has been sent to " + memberList.size + " members");
+      }
+    );
+  });
 };
 
 export const command: Command = {
