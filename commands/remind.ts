@@ -33,7 +33,7 @@ function parseMessage(content: string): string[] {
 
 /**
  * Repeats an action a set number of times in an attempt to complete it.
- * @param delay Initial delay.
+ * @param delay Initial delay. Doubles each retry.
  * @param retries Number of times to retry the command.
  * @param name Name to keep track of requests in the logs.
  * @param action Function to attempt to send.
@@ -53,12 +53,14 @@ export const retryAction = (
         console.log("Successfully completed Async-Retry action: " + name);
       })
       .catch((err) => {
-        console.log(
-          `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: [${Object.keys(
-            err
-          ).join(", ")}] -> ${err.toString()}`
-        );
-        retryAction(delay, retries - 1, name, action);
+        setTimeout(() => {
+          console.log(
+            `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: [${Object.keys(
+              err
+            ).join(", ")}] -> ${err.toString()}`
+          );
+          retryAction(delay * 2, retries - 1, name, action);
+        }, delay);
       });
   } else {
     console.error("Exceeded the number of action retries for action: " + name);
