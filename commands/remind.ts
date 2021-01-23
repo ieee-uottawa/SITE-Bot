@@ -1,5 +1,5 @@
 import { Message, UserResolvable } from "discord.js";
-import { Command, CommandDefinition, Action } from ".";
+import { Command, CommandDefinition, Action, random } from ".";
 
 export const description: CommandDefinition = {
   name: "Reminder (Admin)",
@@ -59,7 +59,12 @@ export const retryAction = (
               err
             ).join(", ")}] -> ${err.toString()}`
           );
-          retryAction(delay * 2, retries - 1, name, action);
+          retryAction(
+            delay * delay * random.integer(1, 5),
+            retries - 1,
+            name,
+            action
+          );
         }, delay);
       });
   } else {
