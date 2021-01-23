@@ -9,8 +9,7 @@ export const description: CommandDefinition = {
 };
 
 /**
- * Current async message sending algorithm is GARBAGE!
- * Reimplement with a concurrency-limiting solution:
+ * If problems continue to occur, we could add a concurrency-limiting solution:
  * https://stackoverflow.com/questions/40639432/what-is-the-best-way-to-limit-concurrency-when-using-es6s-promise-all
  * ...that can report back at the end to report delivery status.
  */
