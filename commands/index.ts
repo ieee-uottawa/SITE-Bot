@@ -11,7 +11,7 @@ import Stats from "./stats";
 import Stonk from "./stonk";
 import Spongebob from "./spongebob";
 import Tone from "./tone";
-import Remind from "./remind";
+// import Remind from "./remind";
 
 import NewMember from "./newmember";
 
@@ -26,7 +26,7 @@ export const commands: Command[] = [
   Knowledge,
   Spongebob,
   Roulette,
-  Remind,
+  // Remind,
   NewMember,
   PingPong,
   Contribute,
