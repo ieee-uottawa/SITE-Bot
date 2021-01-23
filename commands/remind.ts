@@ -33,7 +33,7 @@ function parseMessage(content: string): string[] {
 
 /**
  * Repeats an action a set number of times in an attempt to complete it.
- * @param delay Initial delay. Doubles each retry.
+ * @param delay Initial delay. Randomly increases each time to prevent conflicts.
  * @param retries Number of times to retry the command.
  * @param name Name to keep track of requests in the logs.
  * @param action Function to attempt to send.
@@ -59,12 +59,7 @@ export const retryAction = (
               err
             ).join(", ")}] -> ${err.toString()}`
           );
-          retryAction(
-            delay * delay * random.integer(1, 5),
-            retries - 1,
-            name,
-            action
-          );
+          retryAction(delay * random.integer(1, 10), retries - 1, name, action);
         }, delay);
       });
   } else {
