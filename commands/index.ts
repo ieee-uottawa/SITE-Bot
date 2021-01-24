@@ -60,9 +60,7 @@ export async function handleMessage(message: Message) {
 
   // The use of .every here allows us to quit as soon as a command is found.
   const result = commands.every((command) => {
-    console.log("Checking command " + command.definition.name);
     return command.definition.keys.every((cmdKey) => {
-      console.log(" -> key " + cmdKey);
       if (cmdKey === key) {
         console.log(
           `${message.id} => Running the ${command.definition.name} command.`
@@ -89,7 +87,6 @@ export async function handleMessage(message: Message) {
           });
 
         // This loop can now exit and allow the promise to resolve.
-        console.log("Returning false...");
         return false;
       }
       return true;
@@ -98,8 +95,10 @@ export async function handleMessage(message: Message) {
 
   // If a command was run
   if (result) {
-    console.log("Did not run any commands.");
-    message.reply("You've typed your command incorrectly.");
+    console.log(`${message.id} => Did not request a valid command.`);
+    message.reply(
+      `The key \`!${key}\` has no matching command, use \`!help\` to view a list of commands.`
+    );
     message.channel.stopTyping(true);
   } else {
     console.log("Ran a command.");
