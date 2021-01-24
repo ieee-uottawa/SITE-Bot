@@ -21,7 +21,7 @@ The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 ## Development
 
 We're always looking for more commands! Send us a pull request with your
-contribution and we'll do our best to review and merge it. 
+contribution and we'll do our best to review and merge it.
 See the [Contribute a Command](#contribute-a-command) section for
 instructions on how to use the pluggable command architecture.
 
@@ -89,13 +89,13 @@ Bots aren't people and should't react like them; I don't want to allow commands 
 
 ### Less Is More
 
-Mounds of spaghetti code, or very dense code, present a very high mental load and result in 
+Mounds of spaghetti code, or very dense code, present a very high mental load and result in
 difficult (if not impossible) to maintain projects. When writing commands to submit to this
 project, ask yourself these questions as you are programming:
 
-- Am I using the *simplest possible solution*? Can I find a lazy way to do this?
+- Am I using the _simplest possible solution_? Can I find a lazy way to do this?
 - Can I make my work clearer (variable names, comments, breaking up long methods.)
-- Is there a *more performant solution I am missing*? (filtering a large list vs checking a builtin variable for the same data)
+- Is there a _more performant solution I am missing_? (filtering a large list vs checking a builtin variable for the same data)
 
 <br />
 
