@@ -17,22 +17,23 @@ export const description: CommandDefinition = {
 // Functions for Errors and Error Handling
 // =======================================
 
-function sendApology(message: Message, err: any) {
-  message.channel.send(
+async function sendApology(message: Message, err: any): Promise<Message> {
+  console.error(err);
+  return message.channel.send(
     `:skull_crossbones:  An error occured during spongebobification. :fire:\n ` +
       `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
       "```Error: " +
       err.toString() +
       "```"
   );
-  console.error(err);
 }
 
 function spongebobify(text: string): string {
   const split = text.toLowerCase().split("");
   const noSpecials = split.filter((char) => {
     // Don't return discord styling tokens.
-    if (char === "*" || char === "_" || char === "^" || char === "~" ) return false;
+    if (char === "*" || char === "_" || char === "^" || char === "~")
+      return false;
     return true;
   });
   const uPpEr = noSpecials.map((char) => {
@@ -43,7 +44,11 @@ function spongebobify(text: string): string {
   });
   return uPpEr.join("");
 }
-export const memeMaker = async (message: Message, spongebobifyText: string) => {
+
+export const memeMaker = async (
+  message: Message,
+  spongebobifyText: string
+): Promise<Message> => {
   const fontsize = 50; //number of px for the font.
   const width = 750;
   let textLines: string[] = [];
@@ -108,15 +113,15 @@ export const memeMaker = async (message: Message, spongebobifyText: string) => {
     canvas.toBuffer(),
     "spongebobify_meme.png"
   );
-  message.channel.send(attachment);
+  return message.channel.send(attachment);
 };
 // Command Action Function
 // =======================
 
-export const action: Action = (message: Message) => {
-  message.channel.messages
+export const action: Action = async (message: Message): Promise<any> => {
+  return message.channel.messages
     .fetch()
-    .then((messageList) => {
+    .then(async (messageList) => {
       // messageList now contains the last few messages.
       if (messageList) {
         const res = messageList.every((target) => {
@@ -130,7 +135,7 @@ export const action: Action = (message: Message) => {
           return false;
         });
         if (res === true) {
-          message.channel.send(
+          return message.channel.send(
             ":confounded:  The last few messages are bot commands, media, and invocations..."
           );
         }
@@ -139,7 +144,7 @@ export const action: Action = (message: Message) => {
       }
     })
     .catch((err) => {
-      sendApology(message, err);
+      return sendApology(message, err);
     });
 };
 

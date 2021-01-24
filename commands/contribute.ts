@@ -18,20 +18,20 @@ function isCommandPublic(content: string): boolean {
   return true;
 }
 
-export const action: Action = (message: Message) => {
+export const action: Action = async (message: Message): Promise<void> => {
   const isPublic = isCommandPublic(message.content);
-  const messenger = isPublic ? message.channel : message.author;
+  //const messenger = isPublic ? message.channel : message.author;
 
-  messenger.send(
+  message.channel.send(
     "Contribute to the **IEEE uOttawa SITE-Bot**!" +
       "\n\nLook through the source code at" +
       " https://github.com/ieee-uottawa/SITE-Bot" +
       " and send a pull request."
   );
-  if (!isPublic && message.guild)
-    message.reply(
-      "I've sent you the details! Type `!contribute public` to print the info to this channel."
-    );
+  // if (!isPublic && message.guild)
+  //   message.reply(
+  //     "I've sent you the details! Type `!contribute public` to print the info to this channel."
+  //   );
 };
 
 export const command: Command = {

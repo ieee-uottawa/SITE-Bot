@@ -33,7 +33,7 @@ function noperms(exception: any, message: Message) {
   message.reply(`I don't have permissions to set someone's role.`);
 }
 
-export const action: Action = (message: Message, key: string) => {
+export const action: Action = async (message: Message): Promise<void> => {
   if (message.guild === null || message.member === null) {
     message.reply("Make sure you send this command in a server.");
     return;

@@ -11,6 +11,11 @@ export const description: CommandDefinition = {
 // Cache the help menu text.
 let helpText: string = "";
 
+function truncate(s: string, length: number): string {
+  if (s.length <= length) return s;
+  return s.substring(0, length) + "...";
+}
+
 /**
  * Renders a list of all possible SITE-Bot commands.
  * @param commands The global list of SITE-Bot commands.
@@ -19,15 +24,13 @@ export const help = (): string => {
   // Populate the HelpText if it has not already been filled.
   if (helpText === "")
     helpText =
-      "**__SITE-Bot - Help Menu__**\n\n" +
+      "**__SITE-Bot - Help Menu__**\nType `!help <command>` for usage info and instructions.\n\n" +
       commands
         .map(
           (c) =>
             `**${c.definition.name}**: ${c.definition.keys
               .map((x) => "`!" + x + "`")
-              .join(", ")} - ${
-              c.definition.description
-            }${c.definition.usage.map((u) => `\n\t${u}`)}\n`
+              .join(", ")}\n\t${truncate(c.definition.description, 100)}`
         )
         .join("\n");
 
@@ -42,22 +45,20 @@ export const commandHelp = (command: Command): string => {
   }\n\n**Usage**\n\t${command.definition.usage.join("\n\t")}`;
 };
 
-export const action: Action = (message: Message) => {
+export const action: Action = async (message: Message): Promise<any> => {
   const splitContent = message.content.split(" ");
 
   if (splitContent.length == 1) {
     // If just !public is called, send the manual to the user.
     // message.author.send(help());
-    message.channel.send(help()); // TODO: Revert when DMs are cool again.
+    return message.channel.send(help()); // TODO: Revert when DMs are cool again.
     // message.reply(
     //   "I've sent you the full user manual! Type `!help public` to print the full manual to this channel."
     // );
-    return;
   } else if (splitContent.length == 2) {
     // If the keyword is public, send the manual and return.
     if (splitContent[1].toLowerCase() === "public") {
-      message.channel.send(help());
-      return;
+      return message.channel.send(help());
     }
     // Otherwise, search the list of commands for a matching command.
     const key = splitContent[1].toLowerCase().replace("!", "").trim();
@@ -67,8 +68,7 @@ export const action: Action = (message: Message) => {
       for (let j = 0; j < command.definition.keys.length; j++) {
         const cmdKey = command.definition.keys[j];
         if (cmdKey === key) {
-          message.channel.send(commandHelp(command));
-          return;
+          return message.channel.send(commandHelp(command));
         }
       }
     }

@@ -31,7 +31,7 @@ export const description: CommandDefinition = {
   keys: ["stats"],
 };
 
-export const action = (message: Message, key: string) => {
+export const action = async (message: Message, key: string): Promise<any> => {
   if (!message.guild) {
     message.author.send("Call me in a server!");
     return;
@@ -105,7 +105,7 @@ export const action = (message: Message, key: string) => {
   if (rollCounts.misc.length > 0) data += rollCounts.misc.join("\n");
 
   // Finally, reply to the user:
-  message.reply(data);
+  return message.reply(data);
 };
 
 export const command: Command = {

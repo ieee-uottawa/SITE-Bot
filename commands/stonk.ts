@@ -15,7 +15,7 @@ export const description: CommandDefinition = {
   keys: ["stonk"],
 };
 
-export const action: Action = (message: Message, key) => {
+export const action: Action = async (message: Message): Promise<any> => {
   if (FMP_KEY === undefined) {
     message.channel.send("API Key Not Configured");
     return;
@@ -29,7 +29,7 @@ export const action: Action = (message: Message, key) => {
     return;
   }
 
-  fetch(
+  return fetch(
     `https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${FMP_KEY}`
   )
     .then((response: any) => {
@@ -46,17 +46,17 @@ export const action: Action = (message: Message, key) => {
         res["Error Message"]?.split(".")[0].trim() === LIMIT_REACHED_RESULT
       )
         // API Limit Reached
-        message.channel.send(
+        return message.channel.send(
           "API Limit Reached for the day, `!stonk` is on vacation! :chart_with_upwards_trend:"
         );
       else
-        message.channel.send(
+        return message.channel.send(
           `**${symbol} - ${res[0].name}** :chart_with_upwards_trend:\nExchange: \`${res[0].exchange}\`\nCurrent: \`$${res[0].price}\`\nChange: \`${res[0].changesPercentage}%\`\nOpen: \`$${res[0].open}\`\nPrevious Close: \`$${res[0].previousClose}\``
         );
     })
     .catch((err: any) => {
       console.error(err);
-      message.channel.send(
+      return message.channel.send(
         "Whoops... Looks like the API hit an error, let's give it a break."
       );
     });

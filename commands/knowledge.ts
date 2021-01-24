@@ -33,8 +33,8 @@ export const description: CommandDefinition = {
   keys: ["knowledge"],
 };
 
-export const action: Action = (message: Message) => {
-  axios
+export const action: Action = async (message: Message): Promise<void> => {
+  return axios
     .get(endpoint)
     .then((res: any) => {
       const data: WikiResponse = res.data;

@@ -8,7 +8,7 @@ export const description: CommandDefinition = {
   keys: ["ping"],
 };
 
-export const action: Action = (message: Message) => {
+export const action: Action = async (message: Message): Promise<void> => {
   message.channel.send("Pong! Wow, the bot works!");
 };
 

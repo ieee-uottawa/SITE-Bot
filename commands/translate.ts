@@ -38,15 +38,16 @@ const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 // Functions for Errors and Error Handling
 // =======================================
 
-function sendApology(message: Message, err: any) {
+async function sendApology(message: Message, err: any): Promise<Message> {
+  console.error(err);
   if (err.code == 404) {
-    message.channel.send(
+    return message.channel.send(
       "```Error: " +
         err.toString() +
         "```\nType `!tranlate list' to view suported languages."
     );
   } else {
-    message.channel.send(
+    return message.channel.send(
       `:skull_crossbones:  An error occured during translation. :fire:\n ` +
         `Call 1-800-DEVELOPER if the message below looks bad enough.\n` +
         "```Error: " +
@@ -54,7 +55,6 @@ function sendApology(message: Message, err: any) {
         "```"
     );
   }
-  console.error(err);
 }
 
 // Functions for Interacting with IBM APIs
@@ -82,12 +82,12 @@ export const translate = async (
     // Probably a language code, but if not, reply with an error.
     language = split[1];
   } else if (key == "baguette") {
-    return translateIBM(text, "", "en-fr").then((translation) => {
-      message.reply(`the French translation is '${translation}'`);
+    return translateIBM(text, "", "en-fr").then(async (translation) => {
+      return message.reply(`the French translation is '${translation}'`);
     });
   } else {
-    return translateIBM(text, "", "en-fr-CA").then((translation) => {
-      message.reply(`the French translation is '${translation}'`);
+    return translateIBM(text, "", "en-fr-CA").then(async (translation) => {
+      return message.reply(`the French translation is '${translation}'`);
     });
   }
 
@@ -100,16 +100,18 @@ export const translate = async (
     });
   } else if (language.search("-") != -1 && language.length <= 11) {
     // check if the language is a model id
-    return translateIBM(text, "", language).then((translation) => {
-      message.reply(`the translation is '${translation}'`);
+    return translateIBM(text, "", language).then(async (translation) => {
+      return message.reply(`the translation is '${translation}'`);
     });
   }
   // Send to the translation engine.
   return translateIBM(
     text,
     language.toLocaleLowerCase().replace("-", " ")
-  ).then((translation) => {
-    message.reply(`the translation to **${language}** is '${translation}'`);
+  ).then(async (translation) => {
+    return message.reply(
+      `the translation to **${language}** is '${translation}'`
+    );
   });
 };
 
@@ -183,10 +185,13 @@ export const translateIBM = async (
 // Command Action Function
 // =======================
 
-export const action: Action = (message: Message, key: string) => {
-  message.channel.messages
+export const action: Action = async (
+  message: Message,
+  key: string
+): Promise<any> => {
+  return message.channel.messages
     .fetch()
-    .then((messageList) => {
+    .then(async (messageList) => {
       // messageList now contains the last few messages.
       if (messageList) {
         const res = messageList.every((target) => {
@@ -208,8 +213,8 @@ export const action: Action = (message: Message, key: string) => {
         throw new Error("Hm, I couldn't grab the last few messages.");
       }
     })
-    .catch((err) => {
-      sendApology(message, err);
+    .catch(async (err) => {
+      return sendApology(message, err);
     });
 };
 

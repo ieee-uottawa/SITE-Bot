@@ -31,7 +31,7 @@ function unbannable(exception: any, message: Message) {
   );
 }
 
-export const action: Action = (message: Message) => {
+export const action: Action = async (message: Message): Promise<void> => {
   // If not in a guild, tell 'em to play with friends.
   if (!message.guild) {
     message.reply(":gun: This game is better with friends.  :wink:");

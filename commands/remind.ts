@@ -49,19 +49,19 @@ export const retryAction = async (
   retries: number,
   name: string,
   action: () => Promise<any>
-): Promise<boolean | void> => {
+): Promise<any> => {
   // Throw an error if we're out of retries.
   if (retries > 0) {
     console.log("Async-Retry action: " + name);
     // Otherwise, call the action and repeat it if it fails.
     return action()
-      .then(() => {
+      .then(async () => {
         console.log("Successfully completed Async-Retry action: " + name);
         return true;
       })
-      .catch((err) => {
+      .catch(async (err) => {
         // If an error is caught, wait an undetermined amount of time longer.
-        setTimeout(() => {
+        return setTimeout(async () => {
           console.log(
             `Retrying action "${name}", delay:${delay}, retries left: ${retries}, error: [${Object.keys(
               err
@@ -81,7 +81,7 @@ export const retryAction = async (
   }
 };
 
-export const action = (message: Message, key: string) => {
+export const action = async (message: Message): Promise<any> => {
   // Cannot be called outside of a server
   if (!message.guild) {
     console.log(
@@ -152,7 +152,7 @@ export const action = (message: Message, key: string) => {
 
   // Load all the messages to-be-sent into the event queue
   let i = 0;
-  Promise.all(
+  return Promise.all(
     memberList.map((gm) => {
       return retryAction(
         1000,
@@ -168,13 +168,13 @@ export const action = (message: Message, key: string) => {
         }
       );
     })
-  ).then((promises) => {
+  ).then(async (promises) => {
     console.log(
       `All messages sent, ${
         promises.filter((x) => x).length
       } sent successfully.`
     );
-    message.reply(
+    return message.reply(
       `All messages sent, ${
         promises.filter((x) => x).length
       } sent successfully.`

@@ -44,7 +44,7 @@ export type Command = {
   action: Action;
 };
 
-export type Action = (message: Message, key: string) => void;
+export type Action = (message: Message, key: string) => Promise<any>;
 
 export function extractKey(content: string): string {
   const start = content.split(" ")[0];
@@ -53,7 +53,7 @@ export function extractKey(content: string): string {
   return key.toLowerCase();
 }
 
-export async function handleMessage(message: Message): Promise<void> {
+export function handleMessage(message: Message) {
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
 
@@ -61,24 +61,31 @@ export async function handleMessage(message: Message): Promise<void> {
   commands.every((command) => {
     return command.definition.keys.every((cmdKey) => {
       if (cmdKey === key) {
-        console.log(`Running the ${command.definition.name} command.`);
+        console.log(
+          `${message.id} => Running the ${command.definition.name} command.`
+        );
         message.channel.startTyping();
-        try {
-          // Run the command, passing the key to run sub-commands quickly.
-          command.action(message, cmdKey);
-        } catch (err) {
-          // Last resort. Don't let your command call this!
-          console.error(err);
-          message.reply(
-            `the !${cmdKey} command you ran threw an unhandled error: ` +
-              "`" +
-              err.toString() +
-              "`"
-          );
-        } finally {
-          message.channel.stopTyping();
-          return false;
-        }
+
+        // Start the command and respond if there are errors.
+        command
+          .action(message, cmdKey)
+          .catch((err) => {
+            console.error(`${message.id} => Threw an error.`);
+            console.error(err);
+            message.reply(
+              `the !${cmdKey} command you ran threw an unhandled error: ` +
+                "`" +
+                err.toString() +
+                "`"
+            );
+          })
+          .finally(() => {
+            console.log(`${message.id} => Finished running.`);
+            message.channel.stopTyping();
+          });
+
+        // This loop can now exit and allow the promise to resolve.
+        return false;
       }
       return true;
     });

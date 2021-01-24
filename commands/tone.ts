@@ -102,8 +102,8 @@ export const analyzeToneIBM = async (text: string): Promise<string> => {
 //
 // Command Action Function
 // =======================
-export const action: Action = (message: Message) => {
-  message.channel.messages
+export const action: Action = async (message: Message): Promise<any> => {
+  return message.channel.messages
     .fetch()
     .then((messageList) => {
       // messageList now contains the last few messages.
@@ -119,7 +119,7 @@ export const action: Action = (message: Message) => {
           return false;
         });
         if (res === true) {
-          message.channel.send(
+          return message.channel.send(
             ":confounded:  The last few messages are bot commands, media, and invocations..."
           );
         }
@@ -128,7 +128,7 @@ export const action: Action = (message: Message) => {
       }
     })
     .catch((err) => {
-      sendApology(message, err);
+      return sendApology(message, err);
     });
 };
 

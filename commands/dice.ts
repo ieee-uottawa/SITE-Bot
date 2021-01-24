@@ -38,7 +38,10 @@ function parseDieSize(content: string): { num: number; volume: number } {
 // Required Command Exports
 // ========================
 
-export const action: Action = (message: Message, key: string) => {
+export const action: Action = async (
+  message: Message,
+  key: string
+): Promise<void> => {
   if (key === "roll") {
     // Extract die size from message.
     const dieData = parseDieSize(message.content);
@@ -68,10 +71,7 @@ export const action: Action = (message: Message, key: string) => {
     }
 
     // Roll the dice.
-    const results: number[] = [];
-    for (let i = 0; i < dieData.volume; i++) {
-      results.push(random.integer(1, dieData.num));
-    }
+    const results: number[] = random.dice(dieData.num, dieData.volume);
 
     // Respond based on die size.
     const result = results.join(", ");
