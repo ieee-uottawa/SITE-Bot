@@ -53,7 +53,7 @@ export function extractKey(content: string): string {
   return key.toLowerCase();
 }
 
-export function handleMessage(message: Message) {
+export async function handleMessage(message: Message) {
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
 
@@ -64,7 +64,7 @@ export function handleMessage(message: Message) {
         console.log(
           `${message.id} => Running the ${command.definition.name} command.`
         );
-        message.channel.startTyping();
+        if (message.channel) message.channel.startTyping();
 
         // Start the command and respond if there are errors.
         command
@@ -81,7 +81,7 @@ export function handleMessage(message: Message) {
           })
           .finally(() => {
             console.log(`${message.id} => Finished running.`);
-            message.channel.stopTyping();
+            if (message.channel) message.channel.stopTyping(true);
           });
 
         // This loop can now exit and allow the promise to resolve.
