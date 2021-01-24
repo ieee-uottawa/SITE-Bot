@@ -24,7 +24,7 @@ export const commands: Command[] = [
   Dice,
   Stats,
   Knowledge,
-  Spongebob,
+  //Spongebob,
   Roulette,
   Remind,
   NewMember,
