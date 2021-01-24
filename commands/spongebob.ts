@@ -38,8 +38,8 @@ function spongebobify(text: string): string {
   });
   const uPpEr = noSpecials.map((char) => {
     if (random.bool()) return char.toUpperCase(); // Half are upper.
-    if (char === " ") return "  "; // Spaces to double spaces
-    if (random.bool()) return char + " "; // Extra spaces sometimes
+    if (char === " ") return "    "; // Spaces to double spaces
+    if (random.bool(2, 3)) return char + " "; // Extra spaces sometimes
     return char;
   });
   return uPpEr.join("");
@@ -130,8 +130,8 @@ export const action: Action = async (message: Message): Promise<any> => {
           if (target.content.startsWith("!")) return true;
           if (!target.content || target.content.trim() === "") return true;
           // Spongebobify the message and return.
-          memeMaker(target, target.content); //prints as meme
-          //target.channel.send(spongebobify(target.content));//prints as text
+          // memeMaker(target, target.content); //prints as meme
+          target.channel.send(spongebobify(target.content)); //prints as text
           return false;
         });
         if (res === true) {

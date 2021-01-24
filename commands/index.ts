@@ -24,7 +24,7 @@ export const commands: Command[] = [
   Dice,
   Stats,
   Knowledge,
-  //Spongebob,
+  Spongebob,
   Roulette,
   Remind,
   NewMember,
@@ -56,19 +56,24 @@ export function extractKey(content: string): string {
 export async function handleMessage(message: Message) {
   const key = extractKey(message.content);
   if (!key) return; // Return early if key is empty.
+  message.channel.startTyping();
 
   // The use of .every here allows us to quit as soon as a command is found.
-  commands.every((command) => {
+  const result = commands.every((command) => {
+    console.log("Checking command " + command.definition.name);
     return command.definition.keys.every((cmdKey) => {
+      console.log(" -> key " + cmdKey);
       if (cmdKey === key) {
         console.log(
           `${message.id} => Running the ${command.definition.name} command.`
         );
-        if (message.channel) message.channel.startTyping();
 
         // Start the command and respond if there are errors.
         command
           .action(message, cmdKey)
+          .then(() => {
+            console.log(`${message.id} => Finished running.`);
+          })
           .catch((err) => {
             console.error(`${message.id} => Threw an error.`);
             console.error(err);
@@ -80,16 +85,25 @@ export async function handleMessage(message: Message) {
             );
           })
           .finally(() => {
-            console.log(`${message.id} => Finished running.`);
-            if (message.channel) message.channel.stopTyping(true);
+            message.channel.stopTyping(true);
           });
 
         // This loop can now exit and allow the promise to resolve.
+        console.log("Returning false...");
         return false;
       }
       return true;
     });
   });
+
+  // If a command was run
+  if (result) {
+    console.log("Did not run any commands.");
+    message.reply("You've typed your command incorrectly.");
+    message.channel.stopTyping(true);
+  } else {
+    console.log("Ran a command.");
+  }
 }
 
 // Init IFFE
