@@ -46,12 +46,29 @@ export type Command = {
 
 export type Action = (message: Message, key: string) => Promise<any>;
 
+/**
+ * The NodeJS Random engine is terrible, so import and use this instead
+ */
+export const random = new Random(MersenneTwister19937.autoSeed());
+
+/**
+ * Grabs the key (for command invocation) from the incoming message.
+ * @param content Incoming message content.
+ */
 export function extractKey(content: string): string {
   const start = content.split(" ")[0];
   const key = start.replace("!", "");
   console.log(`Key is ${key}`);
   return key.toLowerCase();
 }
+
+// Init IFFE
+(async () => {
+  console.log("Loaded the following commands:");
+  commands.forEach((c) => {
+    console.log(` - !${c.definition.keys.join(", !")} - ${c.definition.name}`);
+  });
+})();
 
 export async function handleMessage(message: Message) {
   const key = extractKey(message.content);
@@ -104,16 +121,3 @@ export async function handleMessage(message: Message) {
     console.log("Ran a command.");
   }
 }
-
-// Init IFFE
-(async () => {
-  console.log("Loaded the following commands:");
-  commands.forEach((c) => {
-    console.log(` - !${c.definition.keys.join(", !")} - ${c.definition.name}`);
-  });
-})();
-
-/**
- * The NodeJS Random engine is terrible, so import and use this instead
- */
-export const random = new Random(MersenneTwister19937.autoSeed());
