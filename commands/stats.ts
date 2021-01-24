@@ -56,13 +56,15 @@ export const action = (message: Message, key: string) => {
     pronoun: [],
     misc: [],
   };
-  const rolesJSON: any = message.guild?.roles.cache.toJSON(); // convert role Map Collection to JSON
+
+  // convert role Map Collection to JSON
+  const rolesJSON: any = message.guild.roles.cache.toJSON();
   for (const key in rolesJSON) {
     // Iterate through each role object
     const roleData: any = rolesJSON[key];
     const roleName = roleData.name;
     const roleCount =
-      message.guild?.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
+      message.guild.roles.cache.get(roleData.id)?.members.size || 0; // Is 0 if undefined
 
     // Do not include any of the roles satisfying any of these criterias:
     if (
@@ -87,17 +89,22 @@ export const action = (message: Message, key: string) => {
     else rollCounts.misc.push(`\`${roleName}: ${roleCount}\``);
   }
 
-  const data =
-    `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`New Member Count: ${newMemberCount}\`\n` +
-    rollCounts.year.sort().join("\n") +
-    `\n` +
-    rollCounts.assoc.join("\n") +
-    `\n` +
-    rollCounts.program.join("\n") +
-    `\n` +
-    rollCounts.pronoun.join("\n") +
-    `\n` +
-    rollCounts.misc.join("\n");
+  let data = `here are the user stats for **${message.guild?.name}**  :bar_chart: \n\`User Count: ${userCount}\`\n\`Bot Count: ${botCount}\`\n\`New Member Count: ${newMemberCount}\`\n`;
+
+  if (rollCounts.year.length > 0)
+    data += rollCounts.year.sort().join("\n") + `\n`;
+
+  if (rollCounts.assoc.length > 0) data += rollCounts.assoc.join("\n") + `\n`;
+
+  if (rollCounts.program.length > 0)
+    data += rollCounts.program.join("\n") + `\n`;
+
+  if (rollCounts.pronoun.length > 0)
+    data += rollCounts.pronoun.join("\n") + `\n`;
+
+  if (rollCounts.misc.length > 0) data += rollCounts.misc.join("\n");
+
+  // Finally, reply to the user:
   message.reply(data);
 };
 
