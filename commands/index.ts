@@ -9,7 +9,6 @@ import Roulette from "./russian-roulette";
 import Translate from "./translate";
 import Stats from "./stats";
 import Stonk from "./stonk";
-import Spongebob from "./spongebob";
 import Tone from "./tone";
 import Remind from "./remind";
 
@@ -24,7 +23,6 @@ export const commands: Command[] = [
   Dice,
   Stats,
   Knowledge,
-  Spongebob,
   Roulette,
   Remind,
   NewMember,
