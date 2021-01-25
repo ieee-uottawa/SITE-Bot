@@ -1,10 +1,10 @@
 import { Message } from "discord.js";
 import { Action, Command, CommandDefinition } from ".";
+import dotenv from "dotenv";
 import { IamAuthenticator } from "ibm-watson/auth";
 import LanguageTranslatorV3, {
   TranslateParams,
 } from "ibm-watson/language-translator/v3";
-import { environment } from "..";
 
 export const description: CommandDefinition = {
   name: "Translate",
@@ -31,8 +31,9 @@ export const description: CommandDefinition = {
 // API Keys for IBM Translation Services
 // =====================================
 
-const apiKey = environment.IBM_TRANSLATE_API_KEY?.toString() || "";
-const apiURL = environment.IBM_TRANSLATE_API_URL?.toString() || "";
+dotenv.config();
+const apiKey = process.env.IBM_TRANSLATE_API_KEY?.toString() || "";
+const apiURL = process.env.IBM_TRANSLATE_API_URL?.toString() || "";
 
 // Functions for Errors and Error Handling
 // =======================================

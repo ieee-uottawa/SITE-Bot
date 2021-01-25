@@ -29,7 +29,6 @@ client.on("message", async (message: Message) => {
 dotenv.config();
 // This Discord client call should come last.
 client.login(process.env.DISCORD_API_KEY);
-export const environment = process.env;
 
 /**
  * Start a tiny express app at {port} to prevent Heroku from killing the service.
