@@ -1,10 +1,9 @@
 import { Message } from "discord.js";
 import { Command, CommandDefinition, Action } from ".";
-import dotenv from "dotenv";
 import fetch from "node-fetch";
+import { environment } from "..";
 
-dotenv.config();
-const FMP_KEY = process.env.FMP_API_KEY || undefined;
+const FMP_KEY = environment.FMP_API_KEY || undefined;
 const LIMIT_REACHED_RESULT = "Limit Reach";
 
 export const description: CommandDefinition = {

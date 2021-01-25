@@ -1,16 +1,21 @@
 import { Message } from "discord.js";
 import { Action, Command, CommandDefinition } from ".";
-import dotenv from "dotenv";
 import { IamAuthenticator } from "ibm-watson/auth";
 import ToneAnalyzerV3, { ToneParams } from "ibm-watson/tone-analyzer/v3";
+import { environment } from "..";
+
+/**
+ * Maintainer: @chch
+ */
 
 export const description: CommandDefinition = {
   name: "Tone",
   description:
-    "Analyzes the previous or provided message for the emotion, it will indicate all the emotion perseved from strongest to weakest if there is more then one",
+    "Returns the emotions present in the provided text.",
   usage: ["!tone", "!tone <text?>"],
   keys: ["tone"],
 };
+
 /**
  * This command uses the IBM Watson Tone Analyzer resource. A 'Lite' plan
  * gets you started with 2,500 API calls per month at no cost.
@@ -20,9 +25,8 @@ export const description: CommandDefinition = {
 
 // API Keys for IBM Translation Services
 // =====================================
-dotenv.config();
-const apiKey = process.env.IBM_TONE_API_KEY?.toString() || "";
-const apiURL = process.env.IBM_TONE_API_URL?.toString() || "";
+const apiKey = environment.IBM_TONE_API_KEY?.toString() || "";
+const apiURL = environment.IBM_TONE_API_URL?.toString() || "";
 
 // Functions for Errors and Error Handling
 // =======================================
