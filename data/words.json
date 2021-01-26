@@ -36,8 +36,7 @@
     "alligator",
     "amoeba",
     "elephant",
-    "duck",
-    "man"
+    "duck"
   ],
   "place": [
     "Omaha",
@@ -87,7 +86,9 @@
     "bathe",
     "breathe",
     "bruise",
-    "chase"
+    "chase",
+    "kick",
+    "hug"
   ],
   "adverb": [
     "abruptly",

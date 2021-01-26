@@ -5,7 +5,7 @@ import words from "../data/words.json";
 export const description: CommandDefinition = {
   name: "Mad Libs",
   description:
-    "Replaces the keywords (prepended with '`\\`', like '\\adjective') in your sentence with the appropriate replacement. Will replace: \\noun, \\name, \\thing, \\person, \\animal, \\place, \\quality, \\idea, \\action, \\verb, \\adverb, and \\adjective.",
+    "Replaces the keywords (prepended with '`\\`', like '\\adjective') in your sentence with the appropriate replacement. Will replace: \\noun, \\name (Rami), \\thing (iPhone), \\person (Rick Sanchez), \\animal (duck), \\place (Ottawa), \\quality (hardness), \\idea (loyalty), \\action (kicked), \\verb (attack), \\adverb (abruptly), and \\adjective (awesome). You can type words after the keyword, like '\\verbed'.",
   usage: ["!madlibs <sentence> (like 'Hello \\noun')"],
   keys: ["madlibs", "libs", "ml"],
 };
