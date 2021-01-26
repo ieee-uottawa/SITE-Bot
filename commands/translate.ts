@@ -17,7 +17,7 @@ export const description: CommandDefinition = {
     "The language parameter can take a simple target language input (ex:Spanish)" +
       " or it can take a source to target model example to do french to spanish the input would be fr-es.",
   ],
-  keys: ["translate", "baguette"],
+  keys: ["translate", "baguette", "tr", "bilingual"],
 };
 
 /**
@@ -81,13 +81,10 @@ export const translate = async (
   } else if (split.length === 2) {
     // Probably a language code, but if not, reply with an error.
     language = split[1];
-  } else if (key == "baguette") {
-    return translateIBM(text, "", "en-fr").then(async (translation) => {
-      return message.reply(`the French translation is '${translation}'`);
-    });
   } else {
+    // Key can be !translate or !baguette
     return translateIBM(text, "", "en-fr-CA").then(async (translation) => {
-      return message.reply(`the French translation is '${translation}'`);
+      return message.reply(`the French Canadian translation is '${translation}'`);
     });
   }
 
