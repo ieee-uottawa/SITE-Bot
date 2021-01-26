@@ -33,7 +33,6 @@ wordValues.push([
 ]);
 
 function replaceInsertions(word: string): string {
-  console.log(`Processing ${word}`);
   // If the word doesn't start with an insertion operator, throw it to the wolves.
   if (!word.startsWith("\\")) return word;
   // Remove the insertion operator.
@@ -41,7 +40,6 @@ function replaceInsertions(word: string): string {
   // Check if
   for (let i = 0; i < wordKeys.length; i++) {
     const key: string = wordKeys[i];
-    console.log(`Key is ${key}`);
     if (word.length >= key.length && word.startsWith(key)) {
       const replacement = random.pick(wordValues[i]);
       // If the key is the same length as the word, return a replacement.
@@ -60,7 +58,6 @@ function replaceInsertions(word: string): string {
 export const action: Action = async (message: Message): Promise<void> => {
   // Split the message into an array.
   const splitMessage = message.content.split(" ").slice(1);
-  console.log(splitMessage);
   message.channel.send(splitMessage.map((w) => replaceInsertions(w)).join(" "));
 };
 
