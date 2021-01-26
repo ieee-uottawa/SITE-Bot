@@ -24,7 +24,7 @@ export const help = (): string => {
   // Populate the HelpText if it has not already been filled.
   if (helpText === "")
     helpText =
-      "**__SITE-Bot - Help Menu__**\nType `!help <command>` for usage info and instructions.\n\n" +
+      "**__SITE-Bot - Help Menu__**\nType `!help <command>` for more usage info and instructions.\n\n" +
       commands
         .map(
           (c) =>
@@ -72,6 +72,9 @@ export const action: Action = async (message: Message): Promise<any> => {
         }
       }
     }
+
+    // If we got here, no help was sent.
+    return message.reply("that's not a command I recognize.");
   }
 };
 

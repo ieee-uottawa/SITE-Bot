@@ -1,0 +1,109 @@
+{
+  "thing": [
+    "book",
+    "pen",
+    "soldering iron",
+    "laptop computer",
+    "desktop computer",
+    "iPhone",
+    "Macbook Pro",
+    "coffee mug",
+    "wizard staff",
+    "camera",
+    "camcorder",
+    "child-safe container of multivitamins"
+  ],
+  "person": [
+    "Betty Crocker",
+    "Saxsquatch",
+    "Rami",
+    "Barack Obama",
+    "Donald Trump",
+    "Joe Biden",
+    "Her Majesty the Queen",
+    "Boris Johnson",
+    "Alexander McKenzie",
+    "Sir John A. Macdonald",
+    "Wilfrid Laurier",
+    "Rick Sanchez",
+    "Joey Salads"
+  ],
+  "animal": [
+    "cat",
+    "dog",
+    "bird",
+    "pig",
+    "alligator",
+    "amoeba",
+    "elephant",
+    "duck",
+    "man"
+  ],
+  "place": [
+    "Omaha",
+    "Ottawa",
+    "Alberta",
+    "Hawaii",
+    "New Vegas",
+    "The Void",
+    "Hyperborea",
+    "The Lost Isles",
+    "Canada"
+  ],
+  "quality": [
+    "softness",
+    "hardness",
+    "emptiness",
+    "shinyness",
+    "cruelty",
+    "joyousness",
+    "happiness"
+  ],
+  "idea": [
+    "justice",
+    "peace",
+    "unity",
+    "fully automated luxury communism",
+    "peace on earth",
+    "honor",
+    "loyalty",
+    "happiness",
+    "privacy"
+  ],
+  "action": [
+    "yodeling",
+    "running",
+    "falling",
+    "ducking",
+    "hurdling",
+    "YOLOing"
+  ],
+  "verb": [
+    "accept",
+    "approve",
+    "attack",
+    "deny",
+    "beg",
+    "bathe",
+    "breathe",
+    "bruise",
+    "chase"
+  ],
+  "adverb": [
+    "abruptly",
+    "absently",
+    "boldly",
+    "calmly",
+    "cheaply",
+    "carelessly"
+  ],
+  "adjective": [
+    "awesome",
+    "abundant",
+    "bad",
+    "evil",
+    "adorable",
+    "bashful",
+    "barren"
+  ]
+}

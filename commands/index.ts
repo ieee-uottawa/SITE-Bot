@@ -9,9 +9,9 @@ import Roulette from "./russian-roulette";
 import Translate from "./translate";
 import Stats from "./stats";
 import Stonk from "./stonk";
-import Spongebob from "./spongebob";
 import Tone from "./tone";
 import Remind from "./remind";
+import MadLibs from "./madlibs";
 
 import NewMember from "./newmember";
 
@@ -19,6 +19,7 @@ import NewMember from "./newmember";
 export const commands: Command[] = [
   Help,
   Translate,
+  MadLibs,
   Tone,
   Stonk,
   Dice,
