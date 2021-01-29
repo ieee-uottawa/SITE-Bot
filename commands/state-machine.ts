@@ -69,14 +69,15 @@ export const action: Action = async (message: Message): Promise<any> => {
   return axios
     .post(endpoint, data, config)
     .then((res: AxiosResponse) => {
-      // This is a full PNG.
-      return message.channel.send("Here's your FSM:", res.data);
+      // TODO: Process image in-memory to the correct format and return it.
+      const attachment = new MessageAttachment(res.data, "fsm.png");
+      return message.channel.send("Here's your FSM:", attachment);
     })
     .catch((err: any) => {
-      console.error("An error occurred while calling the FSM API endpoint.");
+      console.error("This happened:");
       console.error(err);
       message.reply(
-        "Er, the generator might be down? Call 1-800-DEVELOPERS to fix this."
+        "Er, the generator might be down? ```" + err.toString() + "```"
       );
     });
 };
