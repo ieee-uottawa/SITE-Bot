@@ -12,6 +12,7 @@ import Stonk from "./stonk";
 import Tone from "./tone";
 import Remind from "./remind";
 import MadLibs from "./madlibs";
+import FSM from "./state-machine";
 
 import NewMember from "./newmember";
 
@@ -21,6 +22,7 @@ export const commands: Command[] = [
   Translate,
   MadLibs,
   Tone,
+  FSM,
   Stonk,
   Dice,
   Stats,
