@@ -2,7 +2,7 @@ import { Message, MessageAttachment } from "discord.js";
 import { Action, Command, CommandDefinition } from ".";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
-import fs from 'fs';
+import fs from "fs";
 
 axiosRetry(axios, { retries: 3 });
 
@@ -71,8 +71,11 @@ export const action: Action = async (message: Message): Promise<any> => {
     .post(endpoint, data, config)
     .then((res: AxiosResponse) => {
       // TODO: Process image in-memory to the correct format and return it.
-      const file = Buffer.from(res.data);
+      console.log("Reading incoming PNG.");
+      const file = Buffer.from(res.data, "binary");
+      console.log("Creating message attachment.");
       const attachment = new MessageAttachment(file, "fsm.png");
+      console.log("Sending message to Discord.");
       return message.channel.send("Here's your FSM:", attachment);
     })
     .catch((err: any) => {
