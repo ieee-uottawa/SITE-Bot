@@ -2,23 +2,23 @@ import { Message, MessageAttachment } from "discord.js";
 import { Action, Command, CommandDefinition } from ".";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
-import fs from "fs";
 
 axiosRetry(axios, { retries: 3 });
 
 export const description: CommandDefinition = {
   name: "Finite State Machine",
-  description: "Returns a pretty image of an FSA.",
+  description: "Returns a pretty image of an FSA. Takes optional start, end, and engine parameters.",
   usage: [
-    "!fsm <[edge],[source],[target]>+ <start=[source]> <end=[target]>",
+    "!fsm <[edge],[source],[target]>+ <start=[source]> <end=[target]> <engine=[engine]>",
     "!fsm a,x,y b,x,z a,y,x b,y,z b,y,z a,z,z b,z,z start=x end=z",
+    "!fsm a,x,y b,x,z a,y,x b,y,z b,y,z a,z,z b,z,z",
   ],
   keys: ["fsm", "fsa"],
 };
 
 /**
- *
- *
+ * Thanks to @taliamax for the pyfsa <https://github.com/taliamax/pyfsa> tool.
+ * Calls a deployed copy of the tool in a flask app: <https://github.com/taliamax/fsa-svc>
  */
 
 const endpoint: string = "https://fsa-svc-r3k4irmcka-nn.a.run.app/";
@@ -36,10 +36,6 @@ type Data = {
   engine?: string;
 };
 
-/**
- *
- * @param message Incoming Discord message.
- */
 export const action: Action = async (message: Message): Promise<any> => {
   const lowercaseMessage = message.cleanContent.toLowerCase();
 
@@ -48,7 +44,7 @@ export const action: Action = async (message: Message): Promise<any> => {
     lowercaseMessage.match(/([a-z],[a-z],[a-z])/gm) || [];
   const start: string[] = lowercaseMessage.match(/(start=[a-z])/gm) || [];
   const end: string[] = lowercaseMessage.match(/(end=[a-z])/gm) || [];
-  const engine: string[] = lowercaseMessage.match(/(engine=[a-z])/gm) || [];
+  const engine: string[] = lowercaseMessage.match(/(engine=[a-z]+)/gm) || [];
 
   const data: Data = {
     transitions: points.join(" "),
@@ -67,9 +63,9 @@ export const action: Action = async (message: Message): Promise<any> => {
   // Add additional input if provided.
   if (start.length === 1) data.start = start[0].charAt(start[0].length);
   if (end.length === 1) data.end = end[0].charAt(start[0].length);
-  if (engine.length === 1) data.end = end[0].split("=")[1];
+  if (engine.length === 1) data.engine = engine[0].split("=")[1];
 
-  console.log(data);  
+  console.log(`Calling fsa-svc with data: ${JSON.stringify(data)}`);  
 
   return axios
     .post(endpoint, data, config)
@@ -79,9 +75,9 @@ export const action: Action = async (message: Message): Promise<any> => {
     })
     .catch((err: any) => {
       console.error("This happened:");
-      console.error(err);
+      console.error(err.toString());
       message.reply(
-        "Er, the generator might be down? ```" + err.toString() + "```"
+        "Er, the fsa-svc deployment might be down? ```" + err.toString() + "```"
       );
     });
 };
