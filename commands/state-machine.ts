@@ -51,8 +51,8 @@ export const action: Action = async (message: Message): Promise<any> => {
   };
 
   // Return early if input is malformed.
-  if (points.length < 2)
-    return message.reply("Please provide at least two points like 'a,x,y, b,");
+  if (points.length < 1)
+    return message.reply("Please provide at least two points and an edge, like 'a,x,y'");
   if (start.length > 1)
     return message.reply("Please provide just one 'start=source' definition.");
   if (end.length > 1)
