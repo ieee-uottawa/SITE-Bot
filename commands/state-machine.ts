@@ -23,6 +23,7 @@ export const description: CommandDefinition = {
 
 const endpoint: string = "https://fsa-svc-r3k4irmcka-nn.a.run.app/";
 const config: AxiosRequestConfig = {
+  responseType: "stream", // This is critical; without it, you'll just get the first few bits of the image.
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,9 +31,9 @@ const config: AxiosRequestConfig = {
 
 type Data = {
   transitions: string;
-  start: string;
-  end: string;
-  engine: string;
+  start?: string;
+  end?: string;
+  engine?: string;
 };
 
 /**
@@ -40,7 +41,6 @@ type Data = {
  * @param message Incoming Discord message.
  */
 export const action: Action = async (message: Message): Promise<any> => {
-  console.log("Getting FSM data...");
   const lowercaseMessage = message.cleanContent.toLowerCase();
 
   // Extract data from incoming message.
@@ -48,34 +48,33 @@ export const action: Action = async (message: Message): Promise<any> => {
     lowercaseMessage.match(/([a-z],[a-z],[a-z])/gm) || [];
   const start: string[] = lowercaseMessage.match(/(start=[a-z])/gm) || [];
   const end: string[] = lowercaseMessage.match(/(end=[a-z])/gm) || [];
-  const engine: string[] = lowercaseMessage.match(/(end=[a-z])/gm) || [];
+  const engine: string[] = lowercaseMessage.match(/(engine=[a-z])/gm) || [];
+
+  const data: Data = {
+    transitions: points.join(" "),
+  };
 
   // Return early if input is malformed.
   if (points.length < 2)
     return message.reply("Please provide at least two points like 'a,x,y, b,");
-  if (start.length !== 1)
-    return message.reply("Please provide one 'start=source' definition.");
-  if (end.length !== 1)
-    return message.reply("Please provide one 'end=target' definition.");
+  if (start.length > 1)
+    return message.reply("Please provide just one 'start=source' definition.");
+  if (end.length > 1)
+    return message.reply("Please provide just one 'end=target' definition.");
+  if (engine.length > 1)
+    return message.reply("Please provide just one 'engine' definition.");
 
-  const data: Data = {
-    transitions: points.join(" "),
-    start: start[0].charAt(start[0].length),
-    end: end[0].charAt(start[0].length),
-    engine: "dot",
-  };
+  // Add additional input if provided.
+  if (start.length === 1) data.start = start[0].charAt(start[0].length);
+  if (end.length === 1) data.end = end[0].charAt(start[0].length);
+  if (engine.length === 1) data.end = end[0].split("=")[1];
 
-  console.log(JSON.stringify(data));
+  console.log(data);  
 
   return axios
     .post(endpoint, data, config)
-    .then((res: AxiosResponse) => {
-      // TODO: Process image in-memory to the correct format and return it.
-      console.log("Reading incoming PNG.");
-      const file = Buffer.from(res.data, "binary");
-      console.log("Creating message attachment.");
-      const attachment = new MessageAttachment(file, "fsm.png");
-      console.log("Sending message to Discord.");
+    .then(async (res: AxiosResponse) => {
+      const attachment = new MessageAttachment(res.data, "fsm.png");
       return message.channel.send("Here's your FSM:", attachment);
     })
     .catch((err: any) => {
