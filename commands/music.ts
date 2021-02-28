@@ -35,7 +35,19 @@ const playSong = async (
     voiceChannel.join().then(async (x: VoiceConnection) => {
       const url = info.videoDetails.video_url;
       console.log(`Streaming ${url} to ${message.author.tag}`);
-      x.play(await ytdl(url), { type: "opus" });
+      x.play(await ytdl(url), { type: "opus" })
+        .on("finish", () => {
+          message.react("💯");
+        })
+        .on("error", () => {
+          message.react("🥵");
+          message.reply(
+            "Some sort of error occured while playing your song..."
+          );
+        })
+        .on("close", () => {
+          message.react("⏭️");
+        });
       message.channel.stopTyping(true);
       return message.react("❤️");
     });
@@ -92,16 +104,17 @@ export const action: Action = async (
               `https://www.youtube.com/results?search_query=${query}`
             );
             const firstVid = await page.waitForSelector("a#video-title");
-            const url: JSHandle | undefined = await firstVid?.getProperty(
+            const urlElem: JSHandle | undefined = await firstVid?.getProperty(
               "href"
             );
-            if (!url) return message.reply("Er, sorry, couldn't find that.");
-            message.react("✅️");
-            return playSong(
-              url._remoteObject.value.toString(),
-              voiceChannel,
-              message
-            );
+            if (!urlElem)
+              return message.reply("Er, sorry, couldn't find that.");
+
+            // Everything is good:
+            const url: string = urlElem._remoteObject.value.toString();
+            message.react("✅");
+            message.reply(`Playing ${url}`);
+            return playSong(url, voiceChannel, message);
           });
         })
         .catch(() => {
