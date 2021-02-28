@@ -32,10 +32,11 @@ const playSong = async (
   message: Message
 ): Promise<any> => {
   return getBasicInfo(url).then((info: videoInfo) => {
-    voiceChannel.join().then(async (x: VoiceConnection) => {
+    return voiceChannel.join().then(async (x: VoiceConnection) => {
       const url = info.videoDetails.video_url;
       console.log(`Streaming ${url} to ${message.author.tag}`);
-      x.play(await ytdl(url), { type: "opus" })
+      const dispatch = x
+        .play(await ytdl(url), { type: "opus" })
         .on("finish", () => {
           message.react("💯");
         })
@@ -48,7 +49,7 @@ const playSong = async (
         .on("close", () => {
           message.react("⏭️");
         });
-      message.channel.stopTyping(true);
+      dispatch.setVolumeLogarithmic(3 / 5);
       return message.react("❤️");
     });
   });
@@ -82,7 +83,7 @@ export const action: Action = async (
       );
       return;
     }
-    const input: string = content[1];
+    const input: string = message.content.toLowerCase().replace("!play ", " ");
 
     if (validateURL(input)) {
       return playSong(input, voiceChannel, message);
@@ -101,9 +102,9 @@ export const action: Action = async (
         .then((browser: Browser) => {
           return browser.newPage().then(async (page: Page) => {
             // await page.setViewport({ width: 1920, height: 1080 });
-            await page.goto(
-              `https://www.youtube.com/results?search_query=${query}`
-            );
+            const searchUrl: string = `https://www.youtube.com/results?search_query=${query}`;
+            console.log("Search URL is " + searchUrl);
+            await page.goto(searchUrl);
             const firstVid = await page.waitForSelector("a#video-title");
             const urlElem: JSHandle | undefined = await firstVid?.getProperty(
               "href"
@@ -114,7 +115,7 @@ export const action: Action = async (
             // Everything is good:
             const url: string = urlElem._remoteObject.value.toString();
             message.react("✅");
-            // message.reply(`Playing ${url}`).then((msg: Message) => {});
+            message.reply(`Playing ${url}`);
             return playSong(url, voiceChannel, message);
           });
         })
