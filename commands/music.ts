@@ -117,7 +117,8 @@ export const action: Action = async (
             return playSong(url, voiceChannel, message);
           });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error(err);
           message.react("⚠️");
         });
     }
