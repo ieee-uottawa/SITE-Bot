@@ -115,6 +115,7 @@ export const action: Action = async (
             const url: string = urlElem._remoteObject.value.toString();
             message.react("✅");
             message.reply(`Playing ${url}`);
+            browser.close();
             return playSong(url, voiceChannel, message);
           });
         })
