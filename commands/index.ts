@@ -13,12 +13,13 @@ import Tone from "./tone";
 import Remind from "./remind";
 import MadLibs from "./madlibs";
 import FSM from "./state-machine";
-
+import Music from './music';
 import NewMember from "./newmember";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
   Help,
+  Music,
   Translate,
   MadLibs,
   Tone,
@@ -61,7 +62,7 @@ export function extractKey(content: string): string {
   const start = content.split(" ")[0];
   const key = start.replace("!", "");
   console.log(`Key is ${key}`);
-  return key.toLowerCase();
+  return key.toLowerCase().trim();
 }
 
 // Init IFFE
