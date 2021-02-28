@@ -95,8 +95,9 @@ export const action: Action = async (
       // Scrape for the title
       // https://iq.opengenus.org/scrapping-youtube-javascript/
       const query: string = input.replace(" ", "+");
+      // puppeteer on heroku: https://stackoverflow.com/a/52228855
       return puppeteer
-        .launch()
+        .launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] })
         .then((browser: Browser) => {
           return browser.newPage().then(async (page: Page) => {
             // await page.setViewport({ width: 1920, height: 1080 });
@@ -113,7 +114,7 @@ export const action: Action = async (
             // Everything is good:
             const url: string = urlElem._remoteObject.value.toString();
             message.react("✅");
-            message.reply(`Playing ${url}`);
+            // message.reply(`Playing ${url}`).then((msg: Message) => {});
             return playSong(url, voiceChannel, message);
           });
         })
