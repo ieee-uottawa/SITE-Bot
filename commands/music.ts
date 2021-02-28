@@ -44,12 +44,13 @@ const playSong = async (
           })
           .on("error", () => {
             message.react("🥵");
+            message.react("🔥");
             message.reply(
               "Some sort of error occured while playing your song..."
             );
           })
           .on("close", () => {
-            message.react("⏭️");
+            message.react("🛑");
           });
         dispatch.setVolumeLogarithmic(3 / 5);
         return message.react("❤️");
@@ -131,9 +132,12 @@ export const action: Action = async (
             if (!textElem) return;
             const text = textElem._remoteObject.value.toString().trim();
             browser.close();
-            message.reply(`playing *${text}*\n${url}`).then((m: Message) => {
-              m.suppressEmbeds();
-            });
+            message.reply(
+              `playing *${text}*\nStreaming from ${"`"}${url.replace(
+                "https://www.",
+                ""
+              )}${"`"}`
+            );
           });
         })
         .catch((err) => {
