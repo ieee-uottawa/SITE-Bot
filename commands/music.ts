@@ -1,9 +1,8 @@
 import { Message, VoiceChannel, VoiceConnection } from "discord.js";
-import { Command, CommandDefinition, Action } from ".";
+import puppeteer, { Browser, JSHandle, Page } from "puppeteer";
 import { getBasicInfo, validateURL, videoInfo } from "ytdl-core";
 import ytdl from "ytdl-core-discord";
-import cheerio from "cheerio";
-import puppeteer, { Browser, JSHandle, Page, Puppeteer } from "puppeteer";
+import { Action, Command, CommandDefinition } from ".";
 
 type Song = {
   url: string;
