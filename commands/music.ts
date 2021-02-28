@@ -3,6 +3,7 @@ import puppeteer, { Browser, JSHandle, Page } from "puppeteer";
 import { getBasicInfo, validateURL, videoInfo } from "ytdl-core";
 import ytdl from "ytdl-core-discord";
 import { Action, Command, CommandDefinition } from ".";
+import { client } from "..";
 
 type Song = {
   url: string;
@@ -30,28 +31,33 @@ const playSong = async (
   voiceChannel: VoiceChannel,
   message: Message
 ): Promise<any> => {
-  return getBasicInfo(url).then((info: videoInfo) => {
-    return voiceChannel.join().then(async (x: VoiceConnection) => {
-      const url = info.videoDetails.video_url;
-      console.log(`Streaming ${url} to ${message.author.tag}`);
-      const dispatch = x
-        .play(await ytdl(url), { type: "opus" })
-        .on("finish", () => {
-          message.react("💯");
-        })
-        .on("error", () => {
-          message.react("🥵");
-          message.reply(
-            "Some sort of error occured while playing your song..."
-          );
-        })
-        .on("close", () => {
-          message.react("⏭️");
-        });
-      dispatch.setVolumeLogarithmic(3 / 5);
-      return message.react("❤️");
+  console.log(`Playing song '${url}' ...`);
+  return getBasicInfo(url)
+    .then((info: videoInfo) => {
+      return voiceChannel.join().then(async (x: VoiceConnection) => {
+        const url = info.videoDetails.video_url;
+        console.log(`Streaming ${url} to ${message.author.tag}`);
+        const dispatch = x
+          .play(await ytdl(url), { type: "opus" })
+          .on("finish", () => {
+            message.react("💯");
+          })
+          .on("error", () => {
+            message.react("🥵");
+            message.reply(
+              "Some sort of error occured while playing your song..."
+            );
+          })
+          .on("close", () => {
+            message.react("⏭️");
+          });
+        dispatch.setVolumeLogarithmic(3 / 5);
+        return message.react("❤️");
+      });
+    })
+    .catch((err) => {
+      console.error(err);
     });
-  });
 };
 
 // Required Command Exports
@@ -63,6 +69,7 @@ export const action: Action = async (
 ): Promise<any> => {
   console.log("Running music command...");
   console.log(`KEY: ${key}`);
+  // message.suppressEmbeds(); // Prevent a youtube tile from taking up a bunch of space.
 
   // Get voice channel and permission status.
   const voiceChannel = message.member?.voice?.channel;
@@ -82,7 +89,7 @@ export const action: Action = async (
       );
       return;
     }
-    const input: string = message.content.toLowerCase().replace("!play ", " ");
+    const input: string = message.content.split(" ").splice(1).join(" ").trim();
 
     if (validateURL(input)) {
       return playSong(input, voiceChannel, message);
@@ -114,9 +121,19 @@ export const action: Action = async (
             // Everything is good:
             const url: string = urlElem._remoteObject.value.toString();
             message.react("✅");
-            message.reply(`Playing ${url}`);
+            playSong(url, voiceChannel, message).catch((err) => {
+              console.error(err);
+              message.react("⚠️");
+            });
+
+            // Return a message with the song title:
+            const textElem = await firstVid?.getProperty("textContent");
+            if (!textElem) return;
+            const text = textElem._remoteObject.value.toString().trim();
             browser.close();
-            return playSong(url, voiceChannel, message);
+            message.reply(`playing *${text}*\n${url}`).then((m: Message) => {
+              m.suppressEmbeds();
+            });
           });
         })
         .catch((err) => {
