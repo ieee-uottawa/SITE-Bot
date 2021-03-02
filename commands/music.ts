@@ -35,6 +35,7 @@ const playSong = async (
   return getBasicInfo(url)
     .then((info: videoInfo) => {
       return voiceChannel.join().then(async (x: VoiceConnection) => {
+        x.voice?.setSelfDeaf(true); // Prevent eavesdropping like Groovy.
         const url = info.videoDetails.video_url;
         console.log(`Streaming ${url} to ${message.author.tag}`);
         const dispatch = x
@@ -129,8 +130,8 @@ export const action: Action = async (
             if (!textElem) return;
             const text = textElem._remoteObject.value.toString().trim();
             browser.close();
-            message.reply(
-              `playing *${text}*\nStreaming from ${"`"}${url.replace(
+            message.channel.send(
+              `:musical_note:  Now playing *${text}*\nStreaming from ${"`"}${url.replace(
                 "https://www.",
                 ""
               )}${"`"}`
