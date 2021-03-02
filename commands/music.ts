@@ -52,7 +52,8 @@ const playSong = async (
           .on("close", () => {
             message.react("🛑");
           });
-        dispatch.setVolumeLogarithmic(3 / 5);
+        // Default volume is lower to prevent blown out eardrums, ha.
+        dispatch.setVolumeLogarithmic(1 / 3);
         return message.react("❤️");
       });
     })
@@ -68,10 +69,6 @@ export const action: Action = async (
   message: Message,
   key: string
 ): Promise<any> => {
-  console.log("Running music command...");
-  console.log(`KEY: ${key}`);
-  // message.suppressEmbeds(); // Prevent a youtube tile from taking up a bunch of space.
-
   // Get voice channel and permission status.
   const voiceChannel = message.member?.voice?.channel;
   if (!voiceChannel) return message.reply("Join a VC to play music.");
