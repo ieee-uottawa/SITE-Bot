@@ -35,7 +35,6 @@
     "cheerio": "^1.0.0-rc.5",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "erlpack": "github:discord/erlpack",
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.2.7",
@@ -43,12 +42,13 @@
     "ibm-watson": "^6.0.2",
     "node-fetch": "^2.6.1",
     "puppeteer": "^8.0.0",
+    "puppeteer-core": "^8.0.0",
     "random-js": "^2.1.0",
     "utf-8-validate": "^5.0.4",
     "ytdl-core": "^4.5.0",
     "ytdl-core-discord": "^1.2.5"
   },
   "engines": {
-    "node": "14.1.0"
+    "node": "14"
   }
 }

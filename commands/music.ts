@@ -39,7 +39,10 @@ const playSong = async (
         const url = info.videoDetails.video_url;
         console.log(`Streaming ${url} to ${message.author.tag}`);
         const dispatch = x
-          .play(await ytdl(url), { type: "opus" })
+          .play(
+            await ytdl(url, { filter: "audioonly", highWaterMark: 1 << 50 }),
+            { type: "opus", highWaterMark: 1 }
+          )
           .on("finish", () => {
             message.react("💯");
           })
