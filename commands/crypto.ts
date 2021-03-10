@@ -37,7 +37,7 @@ export const action: Action = async (message: Message): Promise<any> => {
         return message.channel.send(
           `**${symbol}** :chart_with_upwards_trend:\nCurrent: \`${
             res.ticker.price
-          } ${res.ticker.target}\`\nVolume:\`${res.ticker.volume} ${
+          } ${res.ticker.target}\`\n24h Volume:\`${res.ticker.volume} ${
             res.ticker.base
           }\`\nPast Hour Change:\`${res.ticker.change} ${
             res.ticker.target
