@@ -1,9 +1,6 @@
 import { Message } from "discord.js";
 import { Command, CommandDefinition, Action } from ".";
-import dotenv from "dotenv";
 import fetch from "node-fetch";
-
-dotenv.config();
 
 export const description: CommandDefinition = {
   name: "Crypto Watcher",
@@ -14,7 +11,7 @@ export const description: CommandDefinition = {
 };
 
 export const action: Action = async (message: Message): Promise<any> => {
-  const symbol = message.content.replace("!crypto ", "").toUpperCase();
+  const symbol = message.content.replace("!crypto ", "").toLowerCase();
   if (symbol === "") {
     message.channel.send(
       "I don't see a symbol... For example, you can do `!crypto BASE-TARGET`, i.e. `!crypto btc-usd`"

@@ -40,7 +40,7 @@ const playSong = async (
         console.log(`Streaming ${url} to ${message.author.tag}`);
         const dispatch = x
           .play(
-            await ytdl(url, { filter: "audioonly", highWaterMark: 1 << 50 }),
+            await ytdl(url, { filter: "audioonly", highWaterMark: 1 << 100 }),
             { type: "opus", highWaterMark: 1 }
           )
           .on("finish", () => {
@@ -91,7 +91,7 @@ export const action: Action = async (
       );
       return;
     }
-    const input: string = message.content.split(" ").splice(1).join(" ").trim();
+    const input: string = message.content.split(" ").splice(1).join("+").trim();
 
     if (validateURL(input)) {
       return playSong(input, voiceChannel, message);
@@ -104,6 +104,8 @@ export const action: Action = async (
       // Scrape for the title
       // https://iq.opengenus.org/scrapping-youtube-javascript/
       const query: string = input.replace(" ", "+");
+
+      console.log(`INPUT QUERY: ${query}`);
       // puppeteer on heroku: https://stackoverflow.com/a/52228855
       return puppeteer
         .launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] })
