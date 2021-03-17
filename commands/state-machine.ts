@@ -7,7 +7,8 @@ axiosRetry(axios, { retries: 3 });
 
 export const description: CommandDefinition = {
   name: "Finite State Machine",
-  description: "Returns a pretty image of an FSA. Takes optional start, end, and engine parameters.",
+  description:
+    "Returns a pretty image of an FSA. Takes optional start, end, and engine parameters.",
   usage: [
     "!fsm <[edge],[source],[target]>+ <start=[source]> <end=[target]> <engine=[engine]>",
     "!fsm a,x,y b,x,z a,y,x b,y,z b,y,z a,z,z b,z,z start=x end=z",
@@ -52,7 +53,9 @@ export const action: Action = async (message: Message): Promise<any> => {
 
   // Return early if input is malformed.
   if (points.length < 1)
-    return message.reply("Please provide at least two points and an edge, like 'a,x,y'");
+    return message.reply(
+      "Please provide at least two points and an edge, like 'a,x,y'"
+    );
   if (start.length > 1)
     return message.reply("Please provide just one 'start=source' definition.");
   if (end.length > 1)
@@ -65,7 +68,7 @@ export const action: Action = async (message: Message): Promise<any> => {
   if (end.length === 1) data.end = end[0].charAt(start[0].length);
   if (engine.length === 1) data.engine = engine[0].split("=")[1];
 
-  console.log(`Calling fsa-svc with data: ${JSON.stringify(data)}`);  
+  console.log(`Calling fsa-svc with data: ${JSON.stringify(data)}`);
 
   return axios
     .post(endpoint, data, config)

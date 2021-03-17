@@ -84,7 +84,9 @@ export const translate = async (
   } else {
     // Key can be !translate or !baguette
     return translateIBM(text, "", "en-fr-CA").then(async (translation) => {
-      return message.reply(`the French Canadian translation is '${translation}'`);
+      return message.reply(
+        `the French Canadian translation is '${translation}'`
+      );
     });
   }
 

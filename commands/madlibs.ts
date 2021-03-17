@@ -28,9 +28,7 @@ wordValues.push([
 
 // Add duplicate "person" as "name"
 wordKeys.push("name");
-wordValues.push([
-  ...words.person,
-]);
+wordValues.push([...words.person]);
 
 function replaceInsertions(word: string): string {
   // If the word doesn't start with an insertion operator, throw it to the wolves.
