@@ -77,7 +77,7 @@ export function extractKey(content: string): string {
 
 export async function handleMessage(message: Message) {
   const key = extractKey(message.content);
-  if (!key) return; // Return early if key is empty.
+  if (!key || key.match(/(!+)/gm)) return; // Return early if key is empty or is a sequence of !.
   message.channel.startTyping();
 
   // The use of .every here allows us to quit as soon as a command is found.
