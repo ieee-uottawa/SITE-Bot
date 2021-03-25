@@ -13,7 +13,7 @@ import { Message } from "discord.js";
  */
 
 export const client = new Discord.Client();
-const msgStart = RegExp(/^\![^!]/)
+const msgStart = RegExp(/^\![a-zA-Z]+/);
 
 client.once("ready", () => {
   console.log("Logged in to Discord! The bot should be available now.");
