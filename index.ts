@@ -22,7 +22,7 @@ client.on("message", async (message: Message) => {
   // Don't respond to other bots.
   if (message.author.bot) return;
   // Return an empty string (no key) if message does not start with a bang.
-  if (!message.content.startsWith("!")) return;
+  if (!/^\![^!]/.exec(message)) return;
   handleMessage(message);
 });
 
