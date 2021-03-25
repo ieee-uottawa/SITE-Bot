@@ -13,6 +13,7 @@ import { Message } from "discord.js";
  */
 
 export const client = new Discord.Client();
+const msgStart = RegExp(/^\![^!]/)
 
 client.once("ready", () => {
   console.log("Logged in to Discord! The bot should be available now.");
@@ -22,7 +23,7 @@ client.on("message", async (message: Message) => {
   // Don't respond to other bots.
   if (message.author.bot) return;
   // Return an empty string (no key) if message does not start with a bang.
-  if (!/^\![^!]/.exec(message.content)) return;
+  if (!msgStart.exec(message.content)) return;
   handleMessage(message);
 });
 
