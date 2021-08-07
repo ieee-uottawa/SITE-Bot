@@ -307,3 +307,42 @@ export const command: Command = {
 };
 export default command;
 ```
+
+# Deployment
+
+This application is designed for easy deployment on **Heroku**, but it would be just as easy to run with systemd on a linux box.
+
+In `/etc/systemd/system/` create a new file named `site-bot.service`
+
+```
+[Unit]
+Description=IEEE uOttawa SITE-Bot
+After=network.target
+
+[Service]
+User=<username>
+WorkingDirectory=/home/<username>/SITE-Bot
+ExecStartPre=/home/<username>/.nvm/nvm-exec npm run build
+ExecStart=/home/<username>/.nvm/nvm-exec npm start
+
+Environment=DISCORD_API_KEY=Nzk5MDAyMzkxMzI3...
+Environment=FMP_API_KEY=0cef2d31db19dae7bc95...
+Environment=IBM_TONE_API_KEY=NsvlyuXtr9a6W8z...
+Environment=IBM_TONE_API_URL=https://api.us-...
+Environment=IBM_TRANSLATE_API_KEY=F8UpG4qr4x...
+Environment=IBM_TRANSLATE_API_URL=https://ap...
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Next you'll need to (as **superuser**) reload the service definitions and start, stop, or enable the service.
+
+```sh
+# In no particular order
+systemctl daemon-reload     # reload service definitions
+sytemctl start site-bot     # start the service
+sytemctl stop site-bot      # stop the service
+systemctl enable site-bot   # enable the service so it starts on boot
+journalctl -f -u site-bot   # view logs
+```
