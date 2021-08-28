@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  site-bot:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: ieee-uottawa/site-bot
+    container_name: site-bot
+    environment:
+      - DISCORD_API_KEY=${DISCORD_API_KEY}
+      - FMP_API_KEY=${FMP_API_KEY}
+      - IBM_TRANSLATE_API_KEY=${IBM_TRANSLATE_API_KEY}
+      - IBM_TRANSLATE_API_URL=${IBM_TRANSLATE_API_URL}
+      - IBM_TONE_API_KEY=${IBM_TONE_API_KEY}
+      - IBM_TONE_API_URL=${IBM_TONE_API_URL}
