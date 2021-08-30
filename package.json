@@ -10,7 +10,7 @@
     "build": "tsc",
     "format": "prettier --write .",
     "watch:build": "tsc --watch",
-    "watch:server": "nodemon ./dist/index.js --watch ./dist",
+    "watch:server": "nodemon --trace-warnings ./dist/index.js --watch ./dist",
     "clean": "rimraf dist"
   },
   "author": "Ryan Fleck <Ryan.Fleck@protonmail.com> (https://ryanfleck.ca)",

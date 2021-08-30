@@ -13,14 +13,14 @@ import Tone from "./tone";
 import Remind from "./remind";
 import MadLibs from "./madlibs";
 import FSM from "./state-machine";
-import Music from "./music";
+// import Music from "./music";
 import NewMember from "./newmember";
 import Crypto from "./crypto";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
   Help,
-  Music,
+  // Music,
   Translate,
   MadLibs,
   Tone,
@@ -91,21 +91,24 @@ export async function handleMessage(message: Message) {
         // Start the command and respond if there are errors.
         command
           .action(message, cmdKey)
-          .then(() => {
-            console.log(`${message.id} => Finished running.`);
-          })
           .catch((err) => {
             console.error(`${message.id} => Threw an error.`);
             console.error(err);
-            message.reply(
-              `the !${cmdKey} command you ran threw an unhandled error: ` +
-                "`" +
-                err.toString() +
-                "`"
-            );
+            message
+              .reply(
+                `the !${cmdKey} command you ran threw an unhandled error: ` +
+                  "`" +
+                  err.toString() +
+                  "`"
+              )
+              .catch(() => {
+                console.error(
+                  "Couldn't send a reply noting the error to the user."
+                );
+              });
           })
           .finally(() => {
-            message.channel.stopTyping(true);
+            console.log(`${message.id} => Finished running.`);
           });
 
         // This loop can now exit and allow the promise to resolve.
@@ -118,11 +121,19 @@ export async function handleMessage(message: Message) {
   // If a command was run
   if (result) {
     console.log(`${message.id} => Did not request a valid command.`);
-    message.reply(
-      `The key \`!${key}\` has no matching command, use \`!help\` to view a list of commands.`
-    );
-    message.channel.stopTyping(true);
+    message
+      .reply(
+        `The key \`!${key}\` has no matching command, use \`!help\` to view a list of commands.`
+      )
+      .catch((err) => {
+        console.error(
+          "The bot probably lacks permissions to type in this channel."
+        );
+        console.error(err);
+      });
   } else {
     console.log("Ran a command.");
   }
+
+  message.channel.stopTyping(true);
 }
