@@ -7,6 +7,7 @@ services:
       dockerfile: ./Dockerfile
     image: ieee-uottawa/site-bot
     container_name: site-bot
+    restart: always
     environment:
       - DISCORD_API_KEY=${DISCORD_API_KEY}
       - FMP_API_KEY=${FMP_API_KEY}
