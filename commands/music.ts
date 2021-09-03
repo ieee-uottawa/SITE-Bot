@@ -20,7 +20,7 @@ export const description: CommandDefinition = {
     "!play toxic britney",
     "!stop",
   ],
-  keys: ["play", "stop", "skip", "queue", "music", "volume"],
+  keys: ["play", "stop"],
 };
 
 // Functions used by this command
