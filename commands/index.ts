@@ -13,14 +13,12 @@ import Tone from "./tone";
 import Remind from "./remind";
 import MadLibs from "./madlibs";
 import FSM from "./state-machine";
-import Music from "./music";
 import NewMember from "./newmember";
 import Crypto from "./crypto";
 
 // To register a command, import it above and add it to this array.
 export const commands: Command[] = [
   Help,
-  Music,
   Translate,
   MadLibs,
   Tone,
