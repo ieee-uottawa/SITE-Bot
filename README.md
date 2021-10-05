@@ -6,6 +6,8 @@
 The **SITE-Bot** runs on the SITE discord. To contribute a command, please read
 [this section](#contribute-a-command).
 
+As of 2021-10-05, the bot is automatically deployed to a container farm run by [@RyanFleck](https://github.com/RyanFleck)
+
 <br />
 
 #### Table of Contents
