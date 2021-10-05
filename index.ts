@@ -16,7 +16,7 @@ export const client = new Discord.Client();
 const msgStart = new RegExp(/^\![a-zA-Z]+/);
 
 client.once("ready", () => {
-  console.log("Logged in to Discord! The bot should be available now.");
+  console.log("Logged in to Discord! SITE-Bot should be available now.");
 });
 
 client.on("message", async (message: Message) => {
